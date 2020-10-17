@@ -7,6 +7,7 @@ import HomeStackScreen from './screens/StackScreen/HomeStackScreen'
 import HistoryStackScreen from './screens/StackScreen/HistoryStackScreen'
 import { SessionCreateSC } from './screens/StackScreen/HomeStackScreen'
 import { SessionLogInSC } from './screens/StackScreen/HomeStackScreen'
+import { SessionQuestionsSC } from './screens/StackScreen/HomeStackScreen'
 import { DrawerScreen } from './screens/Drawer'
 
 
@@ -24,6 +25,7 @@ export default function Routes() {
           <Drawer.Screen  name='History' component={HistoryStackScreen}></Drawer.Screen>
           <Drawer.Screen  name='SessionCreate' component={SessionCreateSC}></Drawer.Screen>
           <Drawer.Screen  name='SessionLogIn' component={SessionLogInSC}></Drawer.Screen>
+          <Drawer.Screen  name='SessionQuestions' component={SessionQuestionsSC}></Drawer.Screen>
         </Drawer.Navigator>
       ) : (
           <StackScreen />

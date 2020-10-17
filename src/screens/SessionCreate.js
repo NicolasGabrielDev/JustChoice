@@ -12,7 +12,10 @@ export default function SessionCreate({navigation}) {
                     <View style={styles.modalView}>
                         <Text>Código da sessão: </Text>
                         <Text>ILRWZ</Text>
-                        <TouchableHighlight style={styles.button} onPress={() => setModalVisible(false)}>
+                        <TouchableHighlight style={styles.button} onPress={() => {
+                            setModalVisible(false)
+                            navigation.navigate('SessionQuestions')
+                        }}>
                             <Text style={styles.textButton}>CONFIRMA</Text>
                         </TouchableHighlight>
                     </View>

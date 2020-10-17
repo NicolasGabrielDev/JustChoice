@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Sessoes from '../Sessoes'
 import SessionCreate from '../SessionCreate'
 import SessionLogIn from '../SessionLogIn'
+import SessionQuestions from '../SessionQuestions'
 
 const HomeStack = createStackNavigator()
 
@@ -67,6 +68,28 @@ export function SessionLogInSC ({ navigation }) {
                 )
             }} />
         </SessionLogInStack.Navigator>
+    )
+}
+
+export function SessionQuestionsSC ({ navigation }) {
+    const SessionQuestionsStack = createStackNavigator()
+    return (
+        <SessionQuestionsStack.Navigator screenOptions={{
+            headerStyle: {
+                backgroundColor: '#27a0ff',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: "bold",
+            }
+        }}>
+            <SessionQuestionsStack.Screen name='SessionQuestions' component={SessionQuestions} options={{
+                title: 'Voltar',
+                headerLeft: () => (
+                    <Icon.Button name='arrow-left' size={20} backgroundColor="#27a0ff" onPress={() => navigation.goBack()}></Icon.Button>
+                )
+            }} />
+        </SessionQuestionsStack.Navigator>
     )
 }
 
