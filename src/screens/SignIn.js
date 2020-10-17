@@ -1,0 +1,105 @@
+import React from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native';
+import api from '../services/api'
+
+export default function SignIn({navigation}) {
+
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
+
+    function handleSignIn(){
+        api.post('login', {email, password})
+        .then(response => {
+            console.warn('Deu certo desgraça')
+        })
+        .catch(error =>{
+            console.warn(error)
+        })
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>JustChoice</Text>
+            <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
+
+            <TextInput 
+                style={styles.input} 
+                value={email} 
+                onChangeText={email => setEmail(email)} 
+                placeholder='E-mail' 
+            />
+            <TextInput
+                style={styles.input}
+                value={password}
+                secureTextEntry={true}
+                onChangeText={password => setPassword(password)}
+                placeholder='Senha'
+            />
+
+            <TouchableHighlight onPress={handleSignIn} style={styles.button}>
+                <Text style={styles.textButton}>ENTRAR</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => navigation.navigate('SignUp')} >
+                <Text style={styles.textLink}>Faça seu cadastro!</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => navigation.navigate('PassReset')} >
+                <Text style={styles.textLink}>Esqueceu sua senha?</Text>
+            </TouchableHighlight>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 24,
+    },
+    title: {
+        fontSize: 56,
+        fontWeight: '600',
+        color: '#27a0ff',
+    },
+    subTitle: {
+        fontSize: 18,
+        color: '#27a0ff',
+        fontFamily: 'sans-serif-light',
+        marginBottom: 36,
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: Dimensions.get('window').width * 0.8,
+        height: 40,
+        backgroundColor: '#27a0ff',
+        borderRadius: 3,
+        marginBottom: 24,
+    },
+    textButton: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 15,
+        color: '#FFFFFF',
+        textAlign: 'center',
+    },
+    input: {
+        backgroundColor: 'white',
+        borderColor: '#ced4da',
+        borderWidth: 1,
+        borderRadius: 3,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        textAlign: 'left',
+        width: Dimensions.get('window').width * 0.8,
+        height: 40,
+        paddingLeft: 8,
+        marginBottom: 12,
+    },
+    textLink: {
+        fontSize: 16,
+        textAlign: "center",
+        color: '#27a0ff',
+    }
+
+})
