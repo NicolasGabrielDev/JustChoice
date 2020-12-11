@@ -1,15 +1,55 @@
 import React from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native';
+import api from '../services/api'
 
 export default function SignUp({navigation}) {
+    const [name, setName] = React.useState()
+    const [email, setEmail] = React.useState()
+    const [password, setPassword] = React.useState()
+    const [confirmPassword, setConfirmPassword] = React.useState()
+
+    function handleSignUp() {
+        api.post('register', {
+            name,
+            email,
+            password,
+            confirmPassword,
+        }).then(response => {
+            const { detail } = response.data
+
+        }).catch(error => {
+            console.log(error)
+        })
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.title}>JustChoice</Text>
             <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
-            <TextInput style={styles.input} placeholder='Nome completo'></TextInput>
-            <TextInput style={styles.input} placeholder='E-mail'></TextInput>
-            <TextInput style={styles.input} placeholder='Senha'></TextInput>
-            <TextInput style={styles.input} placeholder='Confirme a senha'></TextInput>
+            <TextInput 
+                style={styles.input} 
+                value={name} 
+                placeholder='Nome completo' 
+                onChangeText={name => setName(name)}>
+            </TextInput>
+            <TextInput 
+                style={styles.input} 
+                value={email} 
+                placeholder='E-mail' 
+                onChangeText={email => setEmail(email)}>
+            </TextInput>
+            <TextInput 
+                style={styles.input} 
+                value={password} 
+                placeholder='Senha' 
+                onChangeText={password => setPassword(password)}>
+            </TextInput>
+            <TextInput 
+                style={styles.input} 
+                value={confirmPassword} 
+                placeholder='Confirme a senha' 
+                onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}>
+            </TextInput>
+            
             <TouchableHighlight style={styles.button}>
                 <Text style={styles.textButton}>CADASTRE-SE</Text>
             </TouchableHighlight>

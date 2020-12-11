@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../services/api'
 
 export default function SignIn({navigation}) {
@@ -10,7 +11,9 @@ export default function SignIn({navigation}) {
     function handleSignIn(){
         api.post('login', {email, password})
         .then(response => {
-            console.warn('Deu certo desgraça')
+            const { token } = response.data
+            AsyncStorage.setItem('token', token)
+            console.warn('Logado com sucesso')
         })
         .catch(error =>{
             console.warn(error)
