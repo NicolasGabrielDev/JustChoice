@@ -1,11 +1,34 @@
 import React from 'react'
-import { Modal, StyleSheet, Text, TextInput, TouchableHighlight, View, Dimensions } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, TouchableHighlight, View, Dimensions, ActivityIndicator } from 'react-native'
 import { RadioButton } from 'react-native-paper'
+import api from '../services/api'
 
 export default function SessionQuestions({ navigation }) {
-    const [perguntas, setPerguntas] = React.useState({})
     const [visible, setVisible] = React.useState(false)
     const [checked, setChecked] = React.useState('numerica')
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    React.useEffect(() => {
+        setIsLoading(true)
+        function handleSessionQuestion() {
+            api.get('session')
+                .then(reponse => {
+                    const data = response.data
+                }).catch(error => {
+                    console.warn(error)
+                })
+        }
+        setIsLoading(false)
+    },[])
+    
+    {if(isLoading) {
+        return (
+            <View style={{ flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems:'center'}}>
+                <ActivityIndicator color='#27a0ff' size='large'>
+                </ActivityIndicator>
+            </View>
+        )
+    }}
 
     return (
         <View style={styles.container}>
@@ -15,7 +38,7 @@ export default function SessionQuestions({ navigation }) {
                     <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
                     <Text style={styles.subTitle}>Faça sua pergunta por aqui!</Text>
                     <Text style={styles.textQuestion}>Qual a opção?</Text>
-                    <View style={[styles.radioContainer, {paddingLeft: 40}]}>
+                    <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                         <RadioButton
                             value='numerica'
                             onPress={() => setChecked('numerica')}
@@ -23,7 +46,7 @@ export default function SessionQuestions({ navigation }) {
                         </RadioButton>
                         <Text>Númerica</Text>
                     </View>
-                    <View style={[styles.radioContainer, {paddingLeft: 40}]}>
+                    <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                         <RadioButton
                             value='alfabetica'
                             onPress={() => setChecked('alfabetica')}
@@ -31,7 +54,7 @@ export default function SessionQuestions({ navigation }) {
                         </RadioButton>
                         <Text>Alfabética</Text>
                     </View>
-                    <View style={[styles.radioContainer, {paddingLeft: 40}]}>
+                    <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                         <RadioButton
                             value='dificuldade'
                             onPress={() => setChecked('dificuldade')}
@@ -39,7 +62,7 @@ export default function SessionQuestions({ navigation }) {
                         </RadioButton>
                         <Text>Níveis de Dificuldade</Text>
                     </View>
-                    <View style={[styles.radioContainer, {paddingLeft: 40}]}>
+                    <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                         <RadioButton
                             value='qualidade'
                             onPress={() => setChecked('qualidade')}
@@ -47,7 +70,7 @@ export default function SessionQuestions({ navigation }) {
                         </RadioButton>
                         <Text>Níveis de Qualidade</Text>
                     </View>
-                    <View style={[styles.radioContainer, {paddingLeft: 40}]}>
+                    <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                         <RadioButton
                             value='"simnao'
                             onPress={() => setChecked('simnao')}
@@ -57,11 +80,15 @@ export default function SessionQuestions({ navigation }) {
                     </View>
                     <Text style={styles.textQuestion}>E a quantidade?</Text>
                     <TextInput style={styles.input} placeholder="2"></TextInput>
-                    <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center"}}>
-                        <TouchableHighlight style={[styles.button2, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => navigation.navigate('SessionCreate')}>
+                    <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
+                        <TouchableHighlight style={[styles.button2, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => setVisible(false)}>
                             <Text style={styles.textButton2}>CANCELAR</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight style={styles.button2} onPress={() => navigation.navigate('SessionCreate')}>
+                        <TouchableHighlight
+                            style={styles.button2}
+                            onPress={() => {
+                                setVisible(false)
+                            }}>
                             <Text style={styles.textButton2}>CRIAR</Text>
                         </TouchableHighlight>
                     </View>

@@ -2,15 +2,31 @@ import React from 'react'
 import {Dimensions, StyleSheet, Text,TextInput, TouchableHighlight, View } from 'react-native'
 
 export default function SessionLogIn({navigation}) {
+    const [codigo, setCodigo] = React.useState('')
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    {if(isLoading) {
+        return (
+            <View style={{ flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems:'center'}}>
+                <ActivityIndicator color='#27a0ff' size='large'>
+                </ActivityIndicator>
+            </View>
+        )
+    }}
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>JustChoice</Text>
             <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
             
             <Text style={styles.subTitle}>Código da sessão:</Text>
-            <TextInput style={styles.input}></TextInput>
+            <TextInput 
+                style={styles.input}
+                placeholder='Digite aqui seu código!'
+                onChangeText={codigo => setCodigo(codigo)}
+            ></TextInput>
 
-            <TouchableHighlight style={styles.button} onPress={() => setModalVisible(true)}>
+            <TouchableHighlight style={styles.button}>
                 <Text style={styles.textButton}>ENTRAR</Text>
             </TouchableHighlight>
         </View>

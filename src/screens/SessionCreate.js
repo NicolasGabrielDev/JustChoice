@@ -1,9 +1,29 @@
 import React from 'react'
 import {Dimensions, Modal, StyleSheet, Text,TextInput, TouchableHighlight, View } from 'react-native'
+import api from '../services/api'
 
 export default function SessionCreate({navigation}) {
-
+    const [name, setName] = React.useState('')
     const [modalVisible, setModalVisible] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    function handleSessionCreate() {
+        api.post('create', { name })
+        .then(response => {
+            const { codigo } = response.data
+        }).catch(error => {
+            console.warn(error)
+        })
+    }
+
+    {if(isLoading) {
+        return (
+            <View style={{ flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems:'center'}}>
+                <ActivityIndicator color='#27a0ff' size='large'>
+                </ActivityIndicator>
+            </View>
+        )
+    }}
 
     return (
         <View style={styles.container}>
@@ -25,7 +45,7 @@ export default function SessionCreate({navigation}) {
             <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
             
             <Text style={styles.subTitle}>Nome da sessão:</Text>
-            <TextInput style={styles.input}></TextInput>
+            <TextInput style={styles.input} onChangeText={name => setName(name)}></TextInput>
 
             <TouchableHighlight style={styles.button} onPress={() => setModalVisible(true)}>
                 <Text style={styles.textButton}>CRIAR</Text>
