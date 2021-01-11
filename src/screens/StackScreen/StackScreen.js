@@ -7,7 +7,6 @@ import PassReset from '../PassReset'
 
 const Stack = createStackNavigator()
 
-
 const StackScreen = ({ navigation }) => (
     <Stack.Navigator initialRouteName='SignIn' headerMode='none'>
         <Stack.Screen name='SignIn' component={SignIn} />

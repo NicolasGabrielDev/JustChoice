@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableHighlight, Dimensions } from 'react-native';
-import api from '../services/api'
 
 export default function History({ navigation }) {
     return (

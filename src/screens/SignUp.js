@@ -6,20 +6,28 @@ export default function SignUp({navigation}) {
     const [name, setName] = React.useState()
     const [email, setEmail] = React.useState()
     const [password, setPassword] = React.useState()
-    const [confirmPassword, setConfirmPassword] = React.useState()
+    const [password_confirmation, setPassword_Confirmation] = React.useState()
 
     function handleSignUp() {
-        api.post('register', {
-            name,
-            email,
-            password,
-            confirmPassword,
-        }).then(response => {
-            const { detail } = response.data
-
-        }).catch(error => {
-            console.log(error)
-        })
+        fetch('http://whispering-stream-90983.herokuapp.com/api/auth/registro', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              password,
+              password_confirmation
+            })
+          }).then(response => {
+              const { res } = response.formData
+              console.log(res)
+              navigation.navigate('SignIn')
+          }).catch(error => {
+              console.log(error)
+          });
     }
     return (
         <View style={styles.container}>
@@ -45,12 +53,12 @@ export default function SignUp({navigation}) {
             </TextInput>
             <TextInput 
                 style={styles.input} 
-                value={confirmPassword} 
+                value={password_confirmation} 
                 placeholder='Confirme a senha' 
-                onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}>
+                onChangeText={password_confirmation => setPassword_Confirmation(password_confirmation)}>
             </TextInput>
             
-            <TouchableHighlight style={styles.button}>
+            <TouchableHighlight style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.textButton}>CADASTRE-SE</Text>
             </TouchableHighlight>
             <TouchableHighlight onPress={() => navigation.navigate('SignIn')}>

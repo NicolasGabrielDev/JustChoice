@@ -4,22 +4,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../services/api'
 
 export default function SignIn({navigation}) {
-
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
 
-    function handleSignIn(){
-        api.post('login', {email, password})
-        .then(response => {
+    function handleSignIn() {
+        api.post('/api/auth/login', {
+            email,
+            password
+        }).then(response => {
             const { token } = response.data
+            AsyncStorage.removeItem('token')
             AsyncStorage.setItem('token', token)
-            console.warn('Logado com sucesso')
-        })
-        .catch(error =>{
-            console.warn(error)
+            // console.log(token)
+        }).catch(error => {
+            console.log(error)
         })
     }
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>JustChoice</Text>

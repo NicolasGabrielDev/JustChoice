@@ -13,19 +13,21 @@ import { DrawerScreen } from './screens/Drawer'
 
 
 export default function Routes() {
-  const [userToken, setUserToken] = React.useState('null')
+  const [userToken, setUserToken] = React.useState(null)
   const Drawer = createDrawerNavigator()
 
   React.useEffect(() => {
     async function fetchToken() {
       try {
-        const token = await AsyncStorage.getItem('token')
+        let token = await AsyncStorage.getItem('token')
         setUserToken(token)
+        console.log(userToken)
       } catch (error) {
         console.log(error)
       }
     }
-  })
+    fetchToken()
+  }, [])
 
   return (
     <NavigationContainer>

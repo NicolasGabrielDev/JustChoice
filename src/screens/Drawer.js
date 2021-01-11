@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { DrawerContentScrollView, DrawerItem, } from '@react-navigation/drawer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import api from '../services/api'
 
 export function DrawerScreen(props) {
     return (
@@ -70,13 +71,13 @@ export function DrawerScreen(props) {
                     />
                 )}
                 label="Sair"
-                // onPress={async() => {
-                //     try {
-                //         await AsyncStorage.removeItem('token')
-                //     } catch(error) {
-                //         console.log(error)
-                //     }
-                // }}
+                onPress={async() => {
+                    try {
+                        await AsyncStorage.removeItem('token')
+                    } catch(error) {
+                        console.log(error)
+                    }
+                }}
             />
         </View>
     )
