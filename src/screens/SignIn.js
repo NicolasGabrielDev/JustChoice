@@ -2,10 +2,13 @@ import React from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../services/api'
+import { AuthContext } from '../components/context'
 
 export default function SignIn({navigation}) {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
+
+    const { Login } = React.useContext(AuthContext)
 
     function handleSignIn() {
         api.post('/api/auth/login', {
@@ -13,9 +16,9 @@ export default function SignIn({navigation}) {
             password
         }).then(response => {
             const { token } = response.data
-            AsyncStorage.removeItem('token')
-            AsyncStorage.setItem('token', token)
-            // console.log(token)
+            console.log(response)
+            Login(token)
+            console.log(token)
         }).catch(error => {
             console.log(error)
         })

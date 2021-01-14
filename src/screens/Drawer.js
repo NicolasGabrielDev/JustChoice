@@ -1,21 +1,17 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { DrawerContentScrollView, DrawerItem, } from '@react-navigation/drawer'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { AuthContext } from '../components/context'
 import api from '../services/api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
 
 export function DrawerScreen(props) {
+    const { Logout } = React.useContext(AuthContext)
     return (
         <View style={{ flex: 1, }}>
             <DrawerContentScrollView {...props} >
-                <View style={styles.perfilView}>
-                    <Icon color='white' size={48} name='user' />
-                    <View style={styles.textView}>
-                        <Text style={styles.perfilText}>Nicolas Gabriel</Text>
-                        <Text style={styles.perfilText}>emailteste@hotmail.com</Text>
-                    </View>
-                </View>
                 <DrawerItem
                     icon={({ color, size }) => (
                         <Icon
@@ -71,9 +67,24 @@ export function DrawerScreen(props) {
                     />
                 )}
                 label="Sair"
-                onPress={async() => {
+                onPress={async()  => {
                     try {
-                        await AsyncStorage.removeItem('token')
+                        const token = await AsyncStorage.getItem('userToken')
+                        console.log(token)
+                        await api.post('/api/auth/logout', null, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': "Bearer " + token,
+                            },
+                            
+                        }).then(response => {
+                            const { res } = response.data
+                            console.log(response)
+                        }).catch(error => {
+                            console.log(error.response)
+                        })
+                        Logout()
                     } catch(error) {
                         console.log(error)
                     }
@@ -82,24 +93,3 @@ export function DrawerScreen(props) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    perfilView: {
-        flexDirection: "row",
-        paddingLeft: 10,
-        paddingTop: 20,
-        paddingBottom: 20,
-        backgroundColor: '#27a0ff',
-    },
-    perfilText: {
-        fontSize: 16,
-        fontFamily: 'sans-serif-light',
-        color: 'white'
-    },
-    textView: {
-        justifyContent: "center",
-        alignItems: "flex-start",
-        marginLeft: 12,
-        textAlign: 'left',
-    }
-})
