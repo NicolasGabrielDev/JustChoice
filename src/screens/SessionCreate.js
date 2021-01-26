@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
-import { Alert, Dimensions, Modal, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native'
+import { Alert, Dimensions, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import api from '../services/api'
 
 export default function SessionCreate({ navigation }) {
@@ -9,7 +9,6 @@ export default function SessionCreate({ navigation }) {
     const [modalVisible, setModalVisible] = React.useState(false)
 
     async function handleSessionCreate() {
-        await AsyncStorage.removeItem('codigo')
         const token = await AsyncStorage.getItem('userToken')
 
         await api.post('/api/sessao', { nome }, {
@@ -41,13 +40,13 @@ export default function SessionCreate({ navigation }) {
                     <View style={styles.modalView}>
                         <Text>Código da sessão: </Text>
                         <Text>{codigo}</Text>
-                        <TouchableHighlight style={styles.button} onPress={() => {
+                        <TouchableOpacity style={styles.button} onPress={() => {
                             setModalVisible(false)
                             navigation.navigate('SessionQuestions')
 
                         }}>
                             <Text style={styles.textButton}>CONFIRMA</Text>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -57,11 +56,11 @@ export default function SessionCreate({ navigation }) {
             <Text style={styles.subTitle}>Nome da sessão:</Text>
             <TextInput style={styles.input} onChangeText={nome => setNome(nome)}></TextInput>
 
-            <TouchableHighlight style={styles.button} onPress={() => {
+            <TouchableOpacity style={styles.button} onPress={() => {
                 handleSessionCreate()
             }}>
                 <Text style={styles.textButton}>CRIAR</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -131,6 +130,5 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-
     }
 })

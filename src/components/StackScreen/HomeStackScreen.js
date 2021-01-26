@@ -76,13 +76,7 @@ export function SessionQuestionsSC({ navigation }) {
     const SessionQuestionsStack = createStackNavigator()
     return (
         <SessionQuestionsStack.Navigator screenOptions={{
-            headerStyle: {
-                backgroundColor: '#27a0ff',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                fontWeight: "bold",
-            }
+            headerShown: false
         }}>
             <SessionQuestionsStack.Screen name='SessionQuestions' component={SessionQuestions} options={{ headerTitle: ''}}/>
         </SessionQuestionsStack.Navigator>

@@ -8,8 +8,6 @@ export default function SessionLogIn({navigation}) {
 
     async function handleSessionLogIn() {
         const token = await AsyncStorage.getItem('userToken')
-        await AsyncStorage.setItem('codigo', codigo)
-
         await api.post('/api/entrar-sessao', {
             codigo
         },{ 
@@ -18,10 +16,11 @@ export default function SessionLogIn({navigation}) {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => {
+        }).then(async response => {
             const { token } = response.data
+            await AsyncStorage.setItem('codigo', codigo)
+
             navigation.navigate('SessionQuestions')
-            // console.log(res)
         }).catch(error => {
             console.log(error)
         })
