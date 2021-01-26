@@ -1,29 +1,38 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
-import {Dimensions, Modal, StyleSheet, Text,TextInput, TouchableHighlight, View } from 'react-native'
+import { Alert, Dimensions, Modal, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native'
 import api from '../services/api'
 
-export default function SessionCreate({navigation}) {
-    const [name, setName] = React.useState('')
+export default function SessionCreate({ navigation }) {
+    const [nome, setNome] = React.useState('')
+    const [codigo, setCodigo] = React.useState('')
     const [modalVisible, setModalVisible] = React.useState(false)
-    const [isLoading, setIsLoading] = React.useState(false)
 
-    function handleSessionCreate() {
-        api.post('create', { name })
-        .then(response => {
-            const { codigo } = response.data
-        }).catch(error => {
-            console.warn(error)
+    async function handleSessionCreate() {
+        await AsyncStorage.removeItem('codigo')
+        const token = await AsyncStorage.getItem('userToken')
+
+        await api.post('/api/sessao', { nome }, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token,
+            }
         })
+            .then(async response => {
+                const { codigo, res } = response.data
+                setCodigo(codigo)
+                await AsyncStorage.setItem('codigo', codigo)
+                    .then(() => {
+                        setModalVisible(true)
+                        console.log(res)
+                    }).catch(error => {
+                        console.log(error.response)
+                    })
+            }).catch(error => {
+                console.log(error.response)
+            })
     }
-
-    {if(isLoading) {
-        return (
-            <View style={{ flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems:'center'}}>
-                <ActivityIndicator color='#27a0ff' size='large'>
-                </ActivityIndicator>
-            </View>
-        )
-    }}
 
     return (
         <View style={styles.container}>
@@ -31,10 +40,11 @@ export default function SessionCreate({navigation}) {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
                         <Text>Código da sessão: </Text>
-                        <Text>ILRWZ</Text>
+                        <Text>{codigo}</Text>
                         <TouchableHighlight style={styles.button} onPress={() => {
                             setModalVisible(false)
                             navigation.navigate('SessionQuestions')
+
                         }}>
                             <Text style={styles.textButton}>CONFIRMA</Text>
                         </TouchableHighlight>
@@ -43,11 +53,13 @@ export default function SessionCreate({navigation}) {
             </Modal>
             <Text style={styles.title}>JustChoice</Text>
             <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
-            
-            <Text style={styles.subTitle}>Nome da sessão:</Text>
-            <TextInput style={styles.input} onChangeText={name => setName(name)}></TextInput>
 
-            <TouchableHighlight style={styles.button} onPress={() => setModalVisible(true)}>
+            <Text style={styles.subTitle}>Nome da sessão:</Text>
+            <TextInput style={styles.input} onChangeText={nome => setNome(nome)}></TextInput>
+
+            <TouchableHighlight style={styles.button} onPress={() => {
+                handleSessionCreate()
+            }}>
                 <Text style={styles.textButton}>CRIAR</Text>
             </TouchableHighlight>
         </View>
@@ -108,8 +120,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,

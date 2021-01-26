@@ -1,18 +1,31 @@
 import React from 'react'
 import {Dimensions, StyleSheet, Text,TextInput, TouchableHighlight, View } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import api from '../services/api'
 
 export default function SessionLogIn({navigation}) {
     const [codigo, setCodigo] = React.useState('')
-    const [isLoading, setIsLoading] = React.useState(false)
 
-    {if(isLoading) {
-        return (
-            <View style={{ flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems:'center'}}>
-                <ActivityIndicator color='#27a0ff' size='large'>
-                </ActivityIndicator>
-            </View>
-        )
-    }}
+    async function handleSessionLogIn() {
+        const token = await AsyncStorage.getItem('userToken')
+        await AsyncStorage.setItem('codigo', codigo)
+
+        await api.post('/api/entrar-sessao', {
+            codigo
+        },{ 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token,
+            }
+        }).then(response => {
+            const { token } = response.data
+            navigation.navigate('SessionQuestions')
+            // console.log(res)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -26,7 +39,7 @@ export default function SessionLogIn({navigation}) {
                 onChangeText={codigo => setCodigo(codigo)}
             ></TextInput>
 
-            <TouchableHighlight style={styles.button}>
+            <TouchableHighlight style={styles.button} onPress={handleSessionLogIn}>
                 <Text style={styles.textButton}>ENTRAR</Text>
             </TouchableHighlight>
         </View>

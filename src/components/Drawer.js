@@ -2,10 +2,9 @@ import React from 'react'
 import { View } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { DrawerContentScrollView, DrawerItem, } from '@react-navigation/drawer'
-import { AuthContext } from '../components/context'
+import { AuthContext } from './context'
 import api from '../services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import axios from 'axios'
 
 export function DrawerScreen(props) {
     const { Logout } = React.useContext(AuthContext)
@@ -48,7 +47,7 @@ export function DrawerScreen(props) {
 
                 />
             </DrawerContentScrollView>
-            <DrawerItem
+            {/* <DrawerItem
                 icon={({ color, size }) => (
                     <Icon
                         name="gears"
@@ -57,7 +56,7 @@ export function DrawerScreen(props) {
                     />
                 )}
                 label="Configurações"
-            />
+            /> */}
             <DrawerItem
                 icon={({ color, size }) => (
                     <Icon
@@ -70,7 +69,6 @@ export function DrawerScreen(props) {
                 onPress={async()  => {
                     try {
                         const token = await AsyncStorage.getItem('userToken')
-                        console.log(token)
                         await api.post('/api/auth/logout', null, {
                             headers: {
                                 'Accept': 'application/json',
@@ -80,7 +78,7 @@ export function DrawerScreen(props) {
                             
                         }).then(response => {
                             const { res } = response.data
-                            console.log(response)
+                            console.log(res)
                         }).catch(error => {
                             console.log(error.response)
                         })

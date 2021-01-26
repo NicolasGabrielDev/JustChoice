@@ -1,22 +1,20 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthContext } from './components/context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import StackScreen from './screens/StackScreen/StackScreen'
-import HomeStackScreen from './screens/StackScreen/HomeStackScreen'
-import HistoryStackScreen from './screens/StackScreen/HistoryStackScreen'
-import { SessionCreateSC } from './screens/StackScreen/HomeStackScreen'
-import { SessionLogInSC } from './screens/StackScreen/HomeStackScreen'
-import { SessionQuestionsSC } from './screens/StackScreen/HomeStackScreen'
-import { DrawerScreen } from './screens/Drawer'
+
+import StackScreen from './components/StackScreen/StackScreen'
+import {HomeStackScreen, HistoryStackScreen, SessionCreateSC, 
+        SessionLogInSC, SessionQuestionsSC} from './components/StackScreen/HomeStackScreen'
+import { DrawerScreen } from './components/Drawer'
 
 
 export default function Routes() {
   const Drawer = createDrawerNavigator()
 
-  const initialLoginState = {
+  const initialState = {
     userToken: null,
   }
 
@@ -40,7 +38,7 @@ export default function Routes() {
     }
   };
 
-  const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
+  const [loginState, dispatch] = React.useReducer(loginReducer, initialState);
 
   const authContext = React.useMemo(() => ({
     Login: async (userToken) => {
