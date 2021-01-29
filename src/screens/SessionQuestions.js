@@ -1,16 +1,18 @@
 import React from 'react'
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator, SafeAreaView } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator, SafeAreaView, Touchable } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import api from '../services/api'
 import { ScrollView } from 'react-native-gesture-handler'
+import ModalPergunta from '../components/modalPergunta'
 
 export default function SessionQuestions({ navigation }) {
     const [visible, setVisible] = React.useState(false)
     const [quantidade, setQuantidade] = React.useState(2)
     const [checked, setChecked] = React.useState('numerica')
     const [isLoading, setIsLoading] = React.useState(true)
+    const [isResponding, setIsResponding] = React.useState(false)
 
     const [codigo, setCodigo] = React.useState('')
     const [usuario, setUsuario] = React.useState('')
@@ -95,8 +97,7 @@ export default function SessionQuestions({ navigation }) {
             return (
                 <View style={styles.container}>
                     <ScrollView>
-
-                        <Modal style={styles.modalView} visible={visible} onDismiss={() => setVisible(false)}>
+                        <Modal visible={visible} onDismiss={() => setVisible(false)}>
                             <View style={styles.modalContainer}>
                                 <Text style={styles.title}>JustChoice</Text>
                                 <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
@@ -165,6 +166,25 @@ export default function SessionQuestions({ navigation }) {
                             </View>
                         </Modal>
                         <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
+                        {res.perguntas.map((pergunta, index) => {
+                            return (
+                                <TouchableOpacity>
+                                    <View style={{
+                                        borderColor: '#27a0ff',
+                                        borderRadius: 8,
+                                        borderWidth: 1,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        margin: 12,
+                                        height: Dimensions.get('screen').height * 0.1,
+                                        width: Dimensions.get('screen').width * 0.8,
+                                    }}>
+                                        <Text>Pergunta {index + 1}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        })}
                     </ScrollView>
                     <TouchableOpacity style={styles.button} onPress={() => setVisible(true)}>
                         <Text style={styles.textButton}>+</Text>
@@ -181,19 +201,31 @@ export default function SessionQuestions({ navigation }) {
                         <Text style={styles.textTitle}>{res.nome}</Text>
                         {res.perguntas.map((pergunta, index) => {
                             return (
-                                <View style={{
-                                    borderColor: '#27a0ff',
-                                    borderRadius: 8,
-                                    borderWidth: 1,
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    margin: 12,
-                                    height: Dimensions.get('screen').height * 0.1,
-                                    width: Dimensions.get('screen').width * 0.8,
-                                }}>
-                                    <Text>Pergunta {index + 1}</Text>
-                                </View>
+                                <>
+                                    <ModalPergunta 
+                                        isResponding={isResponding} 
+                                        index={index} 
+                                        quantidade={pergunta.quantidade}/>
+                                    <TouchableOpacity onPress={() => {
+                                        setIsResponding(true)
+                                    }}>
+                                        <View style={{
+                                            borderColor: '#27a0ff',
+                                            borderRadius: 8,
+                                            borderWidth: 1,
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            margin: 12,
+                                            height: Dimensions.get('screen').height * 0.1,
+                                            width: Dimensions.get('screen').width * 0.8,
+                                        }}>
+
+                                            <Text>Pergunta {index + 1}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </>
+
                             )
                         })}
                     </ScrollView>
