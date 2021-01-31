@@ -43,7 +43,6 @@ export default function SessionCreate({ navigation }) {
                         <TouchableOpacity style={styles.button} onPress={() => {
                             setModalVisible(false)
                             navigation.navigate('SessionQuestions')
-
                         }}>
                             <Text style={styles.textButton}>CONFIRMA</Text>
                         </TouchableOpacity>
