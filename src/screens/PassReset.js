@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import api from '../services/api'
 
 export default function SignIn({navigation}) {
@@ -30,12 +30,12 @@ export default function SignIn({navigation}) {
                 placeholder='E-mail' 
             />
 
-            <TouchableHighlight onPress={handlePassReset} style={styles.button}>
+            <TouchableOpacity onPress={handlePassReset} style={styles.button}>
                 <Text style={styles.textButton}>ENVIAR</Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => navigation.navigate('SignIn')} >
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
                 <Text style={styles.textLink}>Lembrou a senha? Faça seu login!</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     )
 }

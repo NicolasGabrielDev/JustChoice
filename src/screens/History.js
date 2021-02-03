@@ -1,16 +1,16 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableHighlight, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 
 export default function History({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.viewButton}>
-                <TouchableHighlight style={styles.button}>
+                <TouchableOpacity style={styles.button}>
                     <Text style={styles.textButton}>CRIADAS</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={styles.button}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
                     <Text style={styles.textButton}>PARTICIPADAS</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
             </View>
         </View>
     )

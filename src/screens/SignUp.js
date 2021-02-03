@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import api from '../services/api'
 
 export default function SignUp({navigation}) {
@@ -58,12 +58,12 @@ export default function SignUp({navigation}) {
                 onChangeText={password_confirmation => setPassword_Confirmation(password_confirmation)}>
             </TextInput>
             
-            <TouchableHighlight style={styles.button} onPress={handleSignUp}>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.textButton}>CADASTRE-SE</Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => navigation.navigate('SignIn')}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
                 <Text style={styles.textLink}>Faça seu login!</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Dimensions, StyleSheet, Text,TextInput, TouchableHighlight, View } from 'react-native'
+import {Dimensions, StyleSheet, Text,TextInput, TouchableOpacity, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../services/api'
 
@@ -38,9 +38,9 @@ export default function SessionLogIn({navigation}) {
                 onChangeText={codigo => setCodigo(codigo)}
             ></TextInput>
 
-            <TouchableHighlight style={styles.button} onPress={handleSessionLogIn}>
+            <TouchableOpacity style={styles.button} onPress={handleSessionLogIn}>
                 <Text style={styles.textButton}>ENTRAR</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     )
 }

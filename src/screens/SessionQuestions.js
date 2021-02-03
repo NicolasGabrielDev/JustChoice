@@ -9,7 +9,7 @@ import Styles from '../components/Styles'
 
 export default function SessionQuestions({ navigation }) {
     const [visible, setVisible] = React.useState(false)
-    const [quantidade, setQuantidade] = React.useState(2)
+    const [quantidade, setQuantidade] = React.useState("2")
     const [checked, setChecked] = React.useState('numerica')
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeData, setActiveData] = React.useState({
@@ -29,6 +29,14 @@ export default function SessionQuestions({ navigation }) {
             quantidade: null,
             visible: false,
         })
+    }
+
+    const listarOpcoes = () => {
+        for (let i = 0; i < 5; i++) {
+            return (
+                <Text>{i}</Text>
+            )
+        }
     }
 
     async function fetchData() {
@@ -106,6 +114,8 @@ export default function SessionQuestions({ navigation }) {
         })
     }
 
+
+
     useFocusEffect(
         React.useCallback(() => {
             fetchData()
@@ -150,7 +160,10 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='dificuldade'
-                                        onPress={() => setChecked('dificuldade')}
+                                        onPress={() => {
+                                            setChecked('dificuldade')
+                                            setQuantidade("5")
+                                        }}
                                         status={checked === 'dificuldade' ? 'checked' : 'unchecked'}>
                                     </RadioButton>
                                     <Text>Níveis de Dificuldade</Text>
@@ -158,7 +171,10 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='qualidade'
-                                        onPress={() => setChecked('qualidade')}
+                                        onPress={() => {
+                                            setChecked('qualidade')
+                                            setQuantidade("5")
+                                        }}
                                         status={checked === 'qualidade' ? 'checked' : 'unchecked'}>
                                     </RadioButton>
                                     <Text>Níveis de Qualidade</Text>
@@ -166,7 +182,10 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='"simnao'
-                                        onPress={() => setChecked('simnao')}
+                                        onPress={() => {
+                                            setChecked('simnao')
+                                            setQuantidade("2")
+                                        }}
                                         status={checked === 'simnao' ? 'checked' : 'unchecked'}>
                                     </RadioButton>
                                     <Text>Sim ou Não</Text>
@@ -174,17 +193,19 @@ export default function SessionQuestions({ navigation }) {
                                 <Text style={styles.textQuestion}>E a quantidade?</Text>
                                 <TextInput
                                     style={Styles.input}
-                                    placeholder="2"
                                     value={quantidade}
+                                    editable={((checked === 'dificuldade') ||
+                                        (checked === 'qualidade') ||
+                                        (checked === 'simnao')) ? false : true}
                                     keyboardType='number-pad'
                                     onChangeText={quantidade => setQuantidade(quantidade)}
                                 ></TextInput>
                                 <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
-                                    <TouchableOpacity style={[styles.button2, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => setVisible(false)}>
+                                    <TouchableOpacity style={[Styles.button, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => setVisible(false)}>
                                         <Text style={styles.textButton2}>CANCELAR</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        style={styles.button2}
+                                        style={Styles.button}
                                         onPress={() => {
                                             criarPergunta()
                                         }}>
@@ -196,7 +217,7 @@ export default function SessionQuestions({ navigation }) {
                         <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
                         {res.perguntas.map((pergunta, index) => {
                             return (
-                                <TouchableOpacity>
+                                <TouchableOpacity key={index + 1}>
                                     <View style={styles.perguntaContainer}>
                                         <Text>Pergunta {index + 1}</Text>
                                     </View>
@@ -220,10 +241,45 @@ export default function SessionQuestions({ navigation }) {
                         return (
                             <View key={index + 1}>
                                 <Modal visible={activeData.visible} onRequestClose={resetData}>
+                                    <View style={{
+                                        flex: 0.4,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        backgroundColor: '#27a0ff',
+                                        elevation: 8,
+                                    }}>
+                                        <Text style={[Styles.title, { color: '#ffffff' }]}>JustChoice</Text>
+                                        <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Rápido e fácil de responder...</Text>
+                                    </View>
                                     <View style={styles.modalContainer}>
-                                        <Text style={Styles.title}>JustChoice</Text>
-                                        <Text style={Styles.subTitle}>Rápido e fácil de responder...</Text>
-                                        <Text style={Styles.subTitle}>Responda a pergunta por aqui :)</Text>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            width: "100%"
+                                        }}>
+                                            <Text>Pergunta #1</Text>
+                                        </View>
+                                        {function () {
+                                            switch (activeData.tipo) {
+                                                case "simnao":
+                                                    return (
+                                                        <View style={{
+                                                            flex: 1,
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            width: "100%"
+                                                        }}>
+                                                            <TouchableOpacity style={styles.buttonResposta}>
+                                                                <Text style={styles.textResposta}>Sim</Text>
+                                                            </TouchableOpacity>
+                                                            <TouchableOpacity style={styles.buttonResposta}>
+                                                                <Text style={styles.textResposta}>Não</Text>
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    )
+                                                    break
+                                            }
+                                        }()}
                                         <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
                                             <TouchableOpacity
                                                 style={[Styles.button, { backgroundColor: 'red', marginRight: 20, }]}
@@ -244,12 +300,12 @@ export default function SessionQuestions({ navigation }) {
                                     setActiveData({
                                         id: pergunta.id,
                                         tipo: pergunta.tipo,
-                                        quantidade: pergunta.tipo,
+                                        quantidade: pergunta.quantidade,
                                         visible: true,
                                     })
                                 }}>
                                     <View style={styles.perguntaContainer}>
-                                        <Text>Pergunta </Text>
+                                        <Text>Pergunta {index + 1}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -306,8 +362,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 12,
-        height: Dimensions.get('screen').height * 0.1,
-        width: Dimensions.get('screen').width * 0.8,
+        height: Dimensions.get('window').height * 0.1,
+        width: Dimensions.get('window').width * 0.8,
     },
     textQuestion: {
         fontSize: 18,
@@ -316,4 +372,18 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         paddingLeft: 20,
     },
+    buttonResposta: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#27a0ff',
+        borderWidth: 1,
+        borderRadius: 36,
+        width: Dimensions.get("window").width * 0.9,
+        height: Dimensions.get("window").height * 0.08,
+        margin: 8,
+    },
+    textResposta: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+    }
 })

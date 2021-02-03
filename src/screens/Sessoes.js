@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableHighlight, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 
 export default function sessoes({navigation}) {
     return (
@@ -10,13 +10,13 @@ export default function sessoes({navigation}) {
             <Text style={styles.passText}>Bem vindo!</Text>
             <Text style={styles.passText}>Entre ou crie uma sessão:</Text>
 
-            <TouchableHighlight style={[styles.button, {marginTop: 28}]} onPress={() => navigation.navigate('SessionLogIn')}>
+            <TouchableOpacity style={[styles.button, {marginTop: 28}]} onPress={() => navigation.navigate('SessionLogIn')}>
                 <Text style={styles.textButton}>ENTRAR</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
 
-            <TouchableHighlight style={styles.button} onPress={() => navigation.navigate('SessionCreate')}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SessionCreate')}>
                 <Text style={styles.textButton}>CRIAR</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     )
 }

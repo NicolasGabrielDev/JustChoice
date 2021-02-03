@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableHighlight, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../services/api'
 import { AuthContext } from '../components/context'
@@ -42,15 +42,15 @@ export default function SignIn({navigation}) {
                 placeholder='Senha'
             />
 
-            <TouchableHighlight onPress={handleSignIn} style={styles.button}>
+            <TouchableOpacity onPress={handleSignIn} style={styles.button}>
                 <Text style={styles.textButton}>ENTRAR</Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => navigation.navigate('SignUp')} >
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} >
                 <Text style={styles.textLink}>Faça seu cadastro!</Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => navigation.navigate('PassReset')} >
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('PassReset')} >
                 <Text style={styles.textLink}>Esqueceu sua senha?</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     )
 }
