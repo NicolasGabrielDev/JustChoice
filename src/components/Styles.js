@@ -7,6 +7,7 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingTop: Platform.OS === 'android' ? 25 : 0,
+        backgroundColor: "#ffffff",
     },
     title: {
         alignSelf: 'center',

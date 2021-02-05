@@ -4,8 +4,9 @@ import { RadioButton } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import api from '../services/api'
-import { ScrollView } from 'react-native-gesture-handler'
+import RespostaButton from '../components/RespostaButton'
 import Styles from '../components/Styles'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function SessionQuestions({ navigation }) {
     const [visible, setVisible] = React.useState(false)
@@ -17,6 +18,7 @@ export default function SessionQuestions({ navigation }) {
         tipo: null,
         quantidade: null,
         visible: false,
+        index: null,
     })
     const [codigo, setCodigo] = React.useState('')
     const [usuario, setUsuario] = React.useState('')
@@ -28,6 +30,7 @@ export default function SessionQuestions({ navigation }) {
             tipo: null,
             quantidade: null,
             visible: false,
+            index: null,
         })
     }
 
@@ -232,86 +235,114 @@ export default function SessionQuestions({ navigation }) {
             )
         } else {
             return (
-                <View style={{
-                    flex: 1, justifyContent: 'flex-start', alignItems: 'center',
-                    paddingTop: Platform.OS === 'android' ? 25 : 0
-                }}>
-                    <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
-                    {res.perguntas.map((pergunta, index) => {
-                        return (
-                            <View key={index + 1}>
-                                <Modal visible={activeData.visible} onRequestClose={resetData}>
-                                    <View style={{
-                                        flex: 0.4,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        backgroundColor: '#27a0ff',
-                                        elevation: 8,
-                                    }}>
-                                        <Text style={[Styles.title, { color: '#ffffff' }]}>JustChoice</Text>
-                                        <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Rápido e fácil de responder...</Text>
-                                    </View>
-                                    <View style={styles.modalContainer}>
+                <ScrollView>
+                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                        <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
+                        {res.perguntas.map((pergunta, index) => {
+                            return (
+                                <View key={index + 1}>
+                                    <Modal visible={activeData.visible} onRequestClose={resetData}>
                                         <View style={{
+                                            flex: 0.3,
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            width: "100%"
+                                            backgroundColor: '#27a0ff',
+                                            elevation: 8,
                                         }}>
-                                            <Text>Pergunta #1</Text>
+                                            <Text style={[Styles.title, { color: '#ffffff' }]}>Pergunta {activeData.index}</Text>
+                                            <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Pense bem antes de responder!</Text>
                                         </View>
-                                        {function () {
-                                            switch (activeData.tipo) {
-                                                case "simnao":
-                                                    return (
-                                                        <View style={{
-                                                            flex: 1,
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            width: "100%"
-                                                        }}>
-                                                            <TouchableOpacity style={styles.buttonResposta}>
-                                                                <Text style={styles.textResposta}>Sim</Text>
-                                                            </TouchableOpacity>
-                                                            <TouchableOpacity style={styles.buttonResposta}>
-                                                                <Text style={styles.textResposta}>Não</Text>
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    )
-                                                    break
-                                            }
-                                        }()}
-                                        <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
-                                            <TouchableOpacity
-                                                style={[Styles.button, { backgroundColor: 'red', marginRight: 20, }]}
-                                                onPress={resetData}>
-                                                <Text style={styles.textButton2}>CANCELAR</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={[Styles.button, { backgroundColor: 'green' }]}
-                                                onPress={() => {
-                                                    criarPergunta()
-                                                }}>
-                                                <Text style={styles.textButton2}>RESPONDER</Text>
-                                            </TouchableOpacity>
+                                        <View style={styles.modalContainer}>
+                                            {function () {
+                                                switch (activeData.tipo) {
+                                                    case "simnao":
+                                                        return (
+                                                            <View style={styles.respostaContainer}>
+                                                                <RespostaButton text="Sim" />
+                                                                <RespostaButton text="Não" />
+                                                            </View>
+                                                        )
+                                                        break
+                                                    case "qualidade":
+                                                        return (
+                                                            <View style={styles.respostaContainer}>
+                                                                <RespostaButton text="Excelente" />
+                                                                <RespostaButton text="Bom" />
+                                                                <RespostaButton text="Médio" />
+                                                                <RespostaButton text="Ruim" />
+                                                                <RespostaButton text="Muito ruim" />
+                                                            </View>
+                                                        )
+                                                        break
+                                                    case "dificuldade":
+                                                        return (
+                                                            <View style={styles.respostaContainer}>
+                                                                <RespostaButton text="Muito difícil" />
+                                                                <RespostaButton text="Difícil" />
+                                                                <RespostaButton text="Normal" />
+                                                                <RespostaButton text="Fácil" />
+                                                                <RespostaButton text="Muito fácil" />
+                                                            </View>
+                                                        )
+                                                        break
+                                                    case "numerica":
+                                                        return (
+                                                            <View style={styles.respostaContainer}>
+                                                                <RespostaButton text="Opção 1" />
+                                                                <RespostaButton text="Opção 2" />
+                                                                <RespostaButton text="Opção 3" />
+                                                                <RespostaButton text="Opção 4" />
+                                                                <RespostaButton text="Opção 5" />
+                                                            </View>
+                                                        )
+                                                        break
+                                                    case "alfabetica":
+                                                        return (
+                                                            <View style={styles.respostaContainer}>
+                                                                <RespostaButton text="Letra A" />
+                                                                <RespostaButton text="Letra B" />
+                                                                <RespostaButton text="Letra C" />
+                                                                <RespostaButton text="Letra D" />
+                                                                <RespostaButton text="Letra E" />
+                                                            </View>
+                                                        )
+                                                        break
+                                                }
+                                            }()}
+                                            <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
+                                                <TouchableOpacity
+                                                    style={[Styles.button, { backgroundColor: 'red', marginRight: 20, }]}
+                                                    onPress={resetData}>
+                                                    <Text style={styles.textButton2}>CANCELAR</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={[Styles.button, { backgroundColor: 'green' }]}
+                                                    onPress={() => {
+                                                        criarPergunta()
+                                                    }}>
+                                                    <Text style={styles.textButton2}>RESPONDER</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
-                                    </View>
-                                </Modal>
-                                <TouchableOpacity onPress={() => {
-                                    setActiveData({
-                                        id: pergunta.id,
-                                        tipo: pergunta.tipo,
-                                        quantidade: pergunta.quantidade,
-                                        visible: true,
-                                    })
-                                }}>
-                                    <View style={styles.perguntaContainer}>
-                                        <Text>Pergunta {index + 1}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    })}
-                </View >
+                                    </Modal>
+                                    <TouchableOpacity onPress={() => {
+                                        setActiveData({
+                                            id: pergunta.id,
+                                            tipo: pergunta.tipo,
+                                            quantidade: pergunta.quantidade,
+                                            visible: true,
+                                            index: index + 1,
+                                        })
+                                    }}>
+                                        <View style={styles.perguntaContainer}>
+                                            <Text>Pergunta {index + 1}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+                    </View >
+                </ScrollView>
             )
         }
     }
@@ -347,7 +378,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "flex-start",
+        alignItems: "center",
         backgroundColor: "white",
     },
     radioContainer: {
@@ -372,18 +403,19 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         paddingLeft: 20,
     },
-    buttonResposta: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: '#27a0ff',
-        borderWidth: 1,
-        borderRadius: 36,
-        width: Dimensions.get("window").width * 0.9,
-        height: Dimensions.get("window").height * 0.08,
-        margin: 8,
-    },
     textResposta: {
         fontFamily: 'sans-serif-light',
         fontSize: 18,
-    }
+    },
+    respostaContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: "100%",
+    },
+    textPergunta: {
+        color: '#27a0ff',
+        fontWeight: 'bold',
+        fontSize: 32,
+    },
 })
