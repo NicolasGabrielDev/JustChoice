@@ -3,8 +3,8 @@ import { TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native'
 
 export default function RespostaButton(props) {
     return (
-        <TouchableOpacity style={styles.buttonResposta}>
-            <Text style={styles.textResposta}>{props.text}</Text>
+        <TouchableOpacity  onPress={props.onPress} style={[styles.buttonResposta, props.activeAnswer == props.text ? {backgroundColor: "#27a0ff"} : {backgroundColor: "#ffffff"}]}>
+            <Text style={[styles.textResposta, props.activeAnswer == props.text ? {color: "#ffffff"} : {color: "#000000"}]}>{props.text}</Text>
         </TouchableOpacity>
     )
 }

@@ -13,6 +13,8 @@ export default function SessionQuestions({ navigation }) {
     const [quantidade, setQuantidade] = React.useState("2")
     const [checked, setChecked] = React.useState('numerica')
     const [isLoading, setIsLoading] = React.useState(true)
+    const [activeAnswer, setActiveAnswer] = React.useState("")
+
     const [activeData, setActiveData] = React.useState({
         id: null,
         tipo: null,
@@ -32,14 +34,7 @@ export default function SessionQuestions({ navigation }) {
             visible: false,
             index: null,
         })
-    }
-
-    const listarOpcoes = () => {
-        for (let i = 0; i < 5; i++) {
-            return (
-                <Text>{i}</Text>
-            )
-        }
+        setActiveAnswer("")
     }
 
     async function fetchData() {
@@ -72,7 +67,7 @@ export default function SessionQuestions({ navigation }) {
         };
     }
 
-    async function criarPergunta() {
+    async function createQuestion() {
         const token = await AsyncStorage.getItem('userToken')
 
         await api.post('/api/criar-pergunta', {
@@ -95,7 +90,7 @@ export default function SessionQuestions({ navigation }) {
         })
     }
 
-    async function responderPergunta() {
+    async function answerQuestion() {
         const token = await AsyncStorage.getItem('userToken')
 
         await api.post('/api/criar-resposta', {
@@ -210,7 +205,7 @@ export default function SessionQuestions({ navigation }) {
                                     <TouchableOpacity
                                         style={Styles.button}
                                         onPress={() => {
-                                            criarPergunta()
+                                            createQuestion()
                                         }}>
                                         <Text style={styles.textButton2}>CRIAR</Text>
                                     </TouchableOpacity>
@@ -235,13 +230,15 @@ export default function SessionQuestions({ navigation }) {
             )
         } else {
             return (
-                <ScrollView>
+                <ScrollView style={{ backgroundColor: "#ffffff" }}>
                     <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
                         <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
                         {res.perguntas.map((pergunta, index) => {
                             return (
                                 <View key={index + 1}>
-                                    <Modal visible={activeData.visible} onRequestClose={resetData}>
+                                    <Modal
+                                        visible={activeData.visible}
+                                        onRequestClose={resetData}>
                                         <View style={{
                                             flex: 0.3,
                                             justifyContent: 'center',
@@ -258,52 +255,118 @@ export default function SessionQuestions({ navigation }) {
                                                     case "simnao":
                                                         return (
                                                             <View style={styles.respostaContainer}>
-                                                                <RespostaButton text="Sim" />
-                                                                <RespostaButton text="Não" />
+                                                                <RespostaButton
+                                                                    onPress={() => setActiveAnswer("Sim")}
+                                                                    activeAnswer={activeAnswer}
+                                                                    text="Sim" />
+                                                                <RespostaButton
+                                                                    onPress={() => setActiveAnswer("Não")}
+                                                                    activeAnswer={activeAnswer}
+                                                                    text="Não" />
                                                             </View>
                                                         )
                                                         break
                                                     case "qualidade":
                                                         return (
                                                             <View style={styles.respostaContainer}>
-                                                                <RespostaButton text="Excelente" />
-                                                                <RespostaButton text="Bom" />
-                                                                <RespostaButton text="Médio" />
-                                                                <RespostaButton text="Ruim" />
-                                                                <RespostaButton text="Muito ruim" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Excelente")}
+                                                                    text="Excelente" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Bom")}
+                                                                    text="Bom" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Médio")}
+                                                                    text="Médio" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Ruim")}
+                                                                    text="Ruim" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Muito ruim")}
+                                                                    text="Muito ruim" />
                                                             </View>
                                                         )
                                                         break
                                                     case "dificuldade":
                                                         return (
                                                             <View style={styles.respostaContainer}>
-                                                                <RespostaButton text="Muito difícil" />
-                                                                <RespostaButton text="Difícil" />
-                                                                <RespostaButton text="Normal" />
-                                                                <RespostaButton text="Fácil" />
-                                                                <RespostaButton text="Muito fácil" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Muito difícil")}
+                                                                    text="Muito difícil" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Difícil")}
+                                                                    text="Difícil" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Normal")}
+                                                                    text="Normal" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Fácil")}
+                                                                    text="Fácil" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Muito fácil")}
+                                                                    text="Muito fácil" />
                                                             </View>
                                                         )
                                                         break
                                                     case "numerica":
                                                         return (
                                                             <View style={styles.respostaContainer}>
-                                                                <RespostaButton text="Opção 1" />
-                                                                <RespostaButton text="Opção 2" />
-                                                                <RespostaButton text="Opção 3" />
-                                                                <RespostaButton text="Opção 4" />
-                                                                <RespostaButton text="Opção 5" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Opção 1")}
+                                                                    text="Opção 1" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Opção 2")}
+                                                                    text="Opção 2" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Opção 3")}
+                                                                    text="Opção 3" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Opção 4")}
+                                                                    text="Opção 4" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Opção 5")}
+                                                                    text="Opção 5" />
                                                             </View>
                                                         )
                                                         break
                                                     case "alfabetica":
                                                         return (
                                                             <View style={styles.respostaContainer}>
-                                                                <RespostaButton text="Letra A" />
-                                                                <RespostaButton text="Letra B" />
-                                                                <RespostaButton text="Letra C" />
-                                                                <RespostaButton text="Letra D" />
-                                                                <RespostaButton text="Letra E" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Letra A")}
+                                                                    text="Letra A" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Letra B")}
+                                                                    text="Letra B" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Letra C")}
+                                                                    text="Letra C" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Letra D")}
+                                                                    text="Letra D" />
+                                                                <RespostaButton
+                                                                    activeAnswer={activeAnswer}
+                                                                    onPress={() => setActiveAnswer("Letra E")}
+                                                                    text="Letra E" />
                                                             </View>
                                                         )
                                                         break
@@ -311,15 +374,12 @@ export default function SessionQuestions({ navigation }) {
                                             }()}
                                             <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
                                                 <TouchableOpacity
-                                                    style={[Styles.button, { backgroundColor: 'red', marginRight: 20, }]}
+                                                    style={[Styles.button, { backgroundColor: 'red', marginRight: 20 }]}
                                                     onPress={resetData}>
                                                     <Text style={styles.textButton2}>CANCELAR</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
-                                                    style={[Styles.button, { backgroundColor: 'green' }]}
-                                                    onPress={() => {
-                                                        criarPergunta()
-                                                    }}>
+                                                    style={[Styles.button, { backgroundColor: 'green' }]}>
                                                     <Text style={styles.textButton2}>RESPONDER</Text>
                                                 </TouchableOpacity>
                                             </View>
