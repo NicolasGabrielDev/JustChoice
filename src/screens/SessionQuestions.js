@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator, SafeAreaView, Touchable } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
@@ -14,6 +14,7 @@ export default function SessionQuestions({ navigation }) {
     const [checked, setChecked] = React.useState('numerica')
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeAnswer, setActiveAnswer] = React.useState("")
+    const [adminAnswer, setAdminAnswer] = React.useState([])
 
     const [activeData, setActiveData] = React.useState({
         id: null,
@@ -35,6 +36,25 @@ export default function SessionQuestions({ navigation }) {
             index: null,
         })
         setActiveAnswer("")
+    }
+
+    async function fetchAnswers() {
+        const token = await AsyncStorage.getItem('userToken')
+
+        await api.post('/api/respostas', {
+            "pergunta_id": activeData.id
+        }, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            }
+        }).then(response => {
+            const { res } = response.data
+            setAdminAnswer(res)
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     async function fetchData() {
@@ -94,7 +114,7 @@ export default function SessionQuestions({ navigation }) {
         const token = await AsyncStorage.getItem('userToken')
 
         await api.post('/api/criar-resposta', {
-            "resposta": resposta,
+            "resposta": activeAnswer,
             "pergunta_id": activeData.id
         }, {
             headers: {
@@ -105,14 +125,13 @@ export default function SessionQuestions({ navigation }) {
         }).then(response => {
             const { res } = response.data
             alert(res)
+            resetData()
             fetchData()
-            setVisible(false)
+
         }).catch(error => {
             console.log(error)
         })
     }
-
-
 
     useFocusEffect(
         React.useCallback(() => {
@@ -133,7 +152,9 @@ export default function SessionQuestions({ navigation }) {
             return (
                 <View style={Styles.container}>
                     <ScrollView>
-                        <Modal visible={visible} onRequestClose={() => setVisible(false)}>
+                        <Modal
+                            visible={visible}
+                            onRequestClose={() => setVisible(false)}>
                             <View style={styles.modalContainer}>
                                 <Text style={Styles.title}>JustChoice</Text>
                                 <Text style={Styles.subTitle}>Rápido e fácil de responder...</Text>
@@ -213,13 +234,41 @@ export default function SessionQuestions({ navigation }) {
                             </View>
                         </Modal>
                         <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
+                        <Modal
+                            visible={activeData.visible}
+                            onRequestClose={resetData}
+                            onShow={fetchAnswers}>
+                            <View 
+                                style={{
+                                    flex: 0.3,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    backgroundColor: '#27a0ff',
+                                    elevation: 8}}>
+                                <Text style={[Styles.title, { color: '#ffffff' }]}>Pergunta {activeData.index}</Text>
+                                <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas!</Text>
+                            </View>
+                            <View style={styles.modalContainer}>
+                            </View>
+                        </Modal>
                         {res.perguntas.map((pergunta, index) => {
                             return (
-                                <TouchableOpacity key={index + 1}>
-                                    <View style={styles.perguntaContainer}>
+                                <View >
+                                    <TouchableOpacity
+                                        key={index + 1}
+                                        onPress={() => {
+                                            setActiveData({
+                                                id: pergunta.id,
+                                                tipo: pergunta.tipo,
+                                                quantidade: pergunta.quantidade,
+                                                visible: true,
+                                                index: index + 1,
+                                            })
+                                        }}
+                                        style={styles.perguntaContainer} >
                                         <Text>Pergunta {index + 1}</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
                             )
                         })}
                     </ScrollView>
@@ -379,13 +428,14 @@ export default function SessionQuestions({ navigation }) {
                                                     <Text style={styles.textButton2}>CANCELAR</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
+                                                    onPress={answerQuestion}
                                                     style={[Styles.button, { backgroundColor: 'green' }]}>
                                                     <Text style={styles.textButton2}>RESPONDER</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </View>
                                     </Modal>
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity style={styles.perguntaContainer} onPress={() => {
                                         setActiveData({
                                             id: pergunta.id,
                                             tipo: pergunta.tipo,
@@ -394,9 +444,7 @@ export default function SessionQuestions({ navigation }) {
                                             index: index + 1,
                                         })
                                     }}>
-                                        <View style={styles.perguntaContainer}>
-                                            <Text>Pergunta {index + 1}</Text>
-                                        </View>
+                                        <Text>Pergunta {index + 1}</Text>
                                     </TouchableOpacity>
                                 </View>
                             )
