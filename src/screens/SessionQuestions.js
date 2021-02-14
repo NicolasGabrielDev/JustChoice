@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator, Button } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
@@ -15,6 +15,7 @@ export default function SessionQuestions({ navigation }) {
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeAnswer, setActiveAnswer] = React.useState("")
     const [adminAnswer, setAdminAnswer] = React.useState([])
+    const [numberAnswers, setNumberAnswers] = React.useState([])
 
     const [activeData, setActiveData] = React.useState({
         id: null,
@@ -36,6 +37,7 @@ export default function SessionQuestions({ navigation }) {
             index: null,
         })
         setActiveAnswer("")
+        setNumberAnswers([])
     }
 
     async function fetchAnswers() {
@@ -51,7 +53,55 @@ export default function SessionQuestions({ navigation }) {
             }
         }).then(response => {
             const { res } = response.data
-            setAdminAnswer(res)
+            switch (activeData.tipo) {
+                case "simnao":
+                    let simnao = { "Sim": 0, "Não": 0 }
+                    {
+                        res.map((resposta) => {
+                            simnao[resposta.resposta] = simnao[resposta.resposta] + 1
+                        })
+                    }
+                    setNumberAnswers(simnao)
+                    break;
+                case "qualidade":
+                    let qualidade = { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 }
+                    {
+                        res.map((resposta) => {
+                            qualidade[resposta.resposta] = qualidade[resposta.resposta] + 1
+                        })
+                    }
+                    setNumberAnswers(qualidade)
+                    break;
+                case "dificuldade":
+                    let dificuldade = { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 }
+                    {
+                        res.map((resposta) => {
+                            dificuldade[resposta.resposta] = dificuldade[resposta.resposta] + 1
+                        })
+                    }
+                    setNumberAnswers(dificuldade)
+                    break;
+                case "numerica":
+                    let numerica = { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 }
+                    {
+                        res.map((resposta) => {
+                            numerica[resposta.resposta] = numerica[resposta.resposta] + 1
+                        })
+                    }
+                    setNumberAnswers(numerica)
+                    break;
+                case "alfabetica":
+                    let alfabetica = { "Opção A": 0, "Opção B": 0, "Opção C": 0, "Opção D": 0, "Opção E": 0 }
+                    {
+                        res.map((resposta) => {
+                            alfabetica[resposta.resposta] = alfabetica[resposta.resposta] + 1
+                        })
+                    }
+                    setNumberAnswers(alfabetica)
+                    break;
+                default:
+                    break;
+            }
         }).catch(error => {
             console.log(error)
         })
@@ -236,19 +286,81 @@ export default function SessionQuestions({ navigation }) {
                         <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
                         <Modal
                             visible={activeData.visible}
-                            onRequestClose={resetData}
+                            onRequestClose={() => {
+                                resetData()
+                                setNumberAnswers([])
+                            }}
                             onShow={fetchAnswers}>
-                            <View 
+                            <View
                                 style={{
                                     flex: 0.3,
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     backgroundColor: '#27a0ff',
-                                    elevation: 8}}>
+                                    elevation: 8
+                                }}>
                                 <Text style={[Styles.title, { color: '#ffffff' }]}>Pergunta {activeData.index}</Text>
                                 <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas!</Text>
                             </View>
                             <View style={styles.modalContainer}>
+                                {function () {
+                                    switch (activeData.tipo) {
+                                        case "simnao":
+                                            return (
+                                                <>
+                                                    <Text>Sim: {numberAnswers["Sim"]}</Text>
+                                                    <Text>Não: {numberAnswers["Não"]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        case "qualidade":
+                                            return (
+                                                <>
+                                                    <Text>Excelente: {numberAnswers["Excelente"]}</Text>
+                                                    <Text>Bom: {numberAnswers["Bom"]}</Text>
+                                                    <Text>Médio: {numberAnswers["Médio"]}</Text>
+                                                    <Text>Ruim: {numberAnswers["Ruim"]}</Text>
+                                                    <Text>Muito ruim: {numberAnswers["Muito ruim"]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        case "dificuldade":
+                                            return (
+                                                <>
+                                                    <Text>Muito difícil: {numberAnswers["Muito difícil"]}</Text>
+                                                    <Text>Difícil: {numberAnswers["Difícil"]}</Text>
+                                                    <Text>Normal: {numberAnswers["Normal"]}</Text>
+                                                    <Text>Fácil: {numberAnswers["Fácil"]}</Text>
+                                                    <Text>Muito fácil: {numberAnswers["Muito fácil"]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        case "numerica":
+                                            return (
+                                                <>
+                                                    <Text>Opção 1: {numberAnswers["Opção 1"]}</Text>
+                                                    <Text>Opção 2: {numberAnswers["Opção 2"]}</Text>
+                                                    <Text>Opção 3: {numberAnswers["Opção 3"]}</Text>
+                                                    <Text>Opção 4: {numberAnswers["Opção 4"]}</Text>
+                                                    <Text>Opção 5: {numberAnswers["Opção 5"]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        case "simnao":
+                                            return (
+                                                <>
+                                                    <Text>Opção A: {numberAnswers["Opção A"]}</Text>
+                                                    <Text>Opção B: {numberAnswers["Opção B"]}</Text>
+                                                    <Text>Opção C: {numberAnswers["Opção C"]}</Text>
+                                                    <Text>Opção D: {numberAnswers["Opção D"]}</Text>
+                                                    <Text>Opção E: {numberAnswers["Opção E"]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }()}
                             </View>
                         </Modal>
                         {res.perguntas.map((pergunta, index) => {
