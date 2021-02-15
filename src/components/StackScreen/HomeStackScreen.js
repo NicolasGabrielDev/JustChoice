@@ -1,10 +1,10 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons//FontAwesome'
 import { createStackNavigator } from '@react-navigation/stack'
-import Sessoes from '../../screens/Sessoes'
-import SessionCreate from '../../screens/SessionCreate'
-import SessionLogIn from '../../screens/SessionLogIn'
-import SessionQuestions from '../../screens/SessionQuestions'
+import Sessoes from '../../screens/Sessões/index'
+import SessionCreate from '../../screens/CriarSessão/index'
+import SessionLogIn from '../../screens/SignIn/index'
+import SessionQuestions from '../../screens/QuestõesDaSessão/index'
 
 
 export function HomeStackScreen({ navigation }) {

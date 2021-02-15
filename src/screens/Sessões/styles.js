@@ -1,27 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native'
 
-export default function sessoes({navigation}) {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>JustChoice</Text>
-            <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
-            
-            <Text style={styles.passText}>Bem vindo!</Text>
-            <Text style={styles.passText}>Entre ou crie uma sessão:</Text>
-
-            <TouchableOpacity style={[styles.button, {marginTop: 28}]} onPress={() => navigation.navigate('SessionLogIn')}>
-                <Text style={styles.textButton}>ENTRAR</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SessionCreate')}>
-                <Text style={styles.textButton}>CRIAR</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
+export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
@@ -65,5 +45,4 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-light',
         textAlign: 'center',
     },
-
 })

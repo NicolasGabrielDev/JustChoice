@@ -1,22 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
-export default function History({ navigation }) {
-    return (
-        <View style={styles.container}>
-            <View style={styles.viewButton}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.textButton}>CRIADAS</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.textButton}>PARTICIPADAS</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
+export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',

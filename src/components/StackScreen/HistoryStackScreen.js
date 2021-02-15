@@ -1,7 +1,7 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons//FontAwesome'
 import { createStackNavigator } from '@react-navigation/stack'
-import History from '../../screens/History'
+import History from '../../screens/Histórico/index'
 
 const HistoryStack = createStackNavigator()
 

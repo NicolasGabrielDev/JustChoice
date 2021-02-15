@@ -3,9 +3,10 @@ import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions,
 import { RadioButton } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
-import api from '../services/api'
-import RespostaButton from '../components/RespostaButton'
-import Styles from '../components/Styles'
+import api from '../../services/api'
+import RespostaButton from '../../components/RespostaButton'
+import Styles from '../../components/Styles'
+import styles from './styles'
 import { ScrollView } from 'react-native-gesture-handler'
 
 export default function SessionQuestions({ navigation }) {
@@ -567,75 +568,3 @@ export default function SessionQuestions({ navigation }) {
         }
     }
 }
-
-const styles = StyleSheet.create({
-    buttonPlus: {
-        alignSelf: "flex-end",
-        justifyContent: 'center',
-        backgroundColor: '#27a0ff',
-        width: 54,
-        height: 54,
-        borderRadius: 60,
-        margin: 16,
-    },
-    textButton: {
-        fontWeight: "bold",
-        fontSize: 32,
-        textAlign: 'center',
-        color: '#ffffff',
-    },
-    textButton2: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 15,
-        color: '#FFFFFF',
-        textAlign: 'center',
-    },
-    textTitle: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 24,
-        color: '#696969',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "white",
-    },
-    radioContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-    },
-    perguntaContainer: {
-        borderColor: '#27a0ff',
-        borderRadius: 8,
-        borderWidth: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 12,
-        height: Dimensions.get('window').height * 0.1,
-        width: Dimensions.get('window').width * 0.8,
-    },
-    textQuestion: {
-        fontSize: 18,
-        color: '#000000',
-        fontFamily: 'sans-serif-light',
-        marginVertical: 20,
-        paddingLeft: 20,
-    },
-    textResposta: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 18,
-    },
-    respostaContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: "100%",
-    },
-    textPergunta: {
-        color: '#27a0ff',
-        fontWeight: 'bold',
-        fontSize: 32,
-    },
-})
