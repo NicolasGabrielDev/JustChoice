@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
 import { Alert, Dimensions, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import api from '../../services/api'
+import styles from './styles'
 
 export default function SessionCreate({ navigation }) {
     const [nome, setNome] = React.useState('')

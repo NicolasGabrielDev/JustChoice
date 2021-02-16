@@ -1,8 +1,8 @@
 import React from 'react'
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, ActivityIndicator, Button } from 'react-native'
+import { Modal, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import { RadioButton } from 'react-native-paper'
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useFocusEffect } from '@react-navigation/native'
 import api from '../../services/api'
 import RespostaButton from '../../components/RespostaButton'
 import Styles from '../../components/Styles'
@@ -15,9 +15,7 @@ export default function SessionQuestions({ navigation }) {
     const [checked, setChecked] = React.useState('numerica')
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeAnswer, setActiveAnswer] = React.useState("")
-    const [adminAnswer, setAdminAnswer] = React.useState([])
     const [numberAnswers, setNumberAnswers] = React.useState([])
-
     const [activeData, setActiveData] = React.useState({
         id: null,
         tipo: null,
@@ -201,8 +199,8 @@ export default function SessionQuestions({ navigation }) {
     {
         if (usuario == 'admin') {
             return (
-                <View style={Styles.container}>
-                    <ScrollView>
+                <ScrollView style={{ backgroundColor: "#ffffff"}}>
+                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
                         <Modal
                             visible={visible}
                             onRequestClose={() => setVisible(false)}>
@@ -384,11 +382,11 @@ export default function SessionQuestions({ navigation }) {
                                 </View>
                             )
                         })}
-                    </ScrollView>
-                    <TouchableOpacity style={styles.buttonPlus} onPress={() => setVisible(true)}>
-                        <Text style={styles.textButton}>+</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity style={styles.buttonPlus} onPress={() => setVisible(true)}>
+                            <Text style={styles.textButton}>+</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
             )
         } else {
             return (
