@@ -1,7 +1,8 @@
 import React from 'react'
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TextInput } from 'react-native';
+import Header from '../../components/Header'
+import {Button, LinkButton} from '../../components/Button'
 import styles from './styles'
-import api from '../../services/api'
 
 export default function SignUp({navigation}) {
     const [name, setName] = React.useState("")
@@ -33,8 +34,7 @@ export default function SignUp({navigation}) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>JustChoice</Text>
-            <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
+            <Header />
             <TextInput 
                 style={styles.input} 
                 value={name} 
@@ -59,12 +59,8 @@ export default function SignUp({navigation}) {
                 onChangeText={password_confirmation => setPassword_Confirmation(password_confirmation)}
                 secureTextEntry={true} />
             
-            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                <Text style={styles.textButton}>CADASTRE-SE</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                <Text style={styles.textLink}>Faça seu login!</Text>
-            </TouchableOpacity>
+            <Button text="CADASTRE-SE" onPress={handleSignUp} />
+            <LinkButton text="Faça seu login!" onPress={() => navigation.navigate("SignIn")} />
         </View>
     )
 }

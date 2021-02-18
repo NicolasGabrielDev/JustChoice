@@ -1,8 +1,9 @@
 import React from 'react'
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput } from 'react-native';
 import api from '../../services/api'
 import styles from './styles'
 import Header from '../../components/Header'
+import { Button, LinkButton } from '../../components/Button';
 
 export default function SignIn({navigation}) {
 
@@ -31,12 +32,8 @@ export default function SignIn({navigation}) {
                 placeholder='E-mail' 
             />
 
-            <TouchableOpacity onPress={handlePassReset} style={styles.button}>
-                <Text style={styles.textButton}>ENVIAR</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
-                <Text style={styles.textLink}>Lembrou a senha? Faça seu login!</Text>
-            </TouchableOpacity>
+            <Button text="ENVIAR" onPress={handlePassReset} />
+            <LinkButton text="Lembrou a senha? Faça seu login!" onPress={() => navigation.navigate("SignIn")} />
         </View>
     )
 }

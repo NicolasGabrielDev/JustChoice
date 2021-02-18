@@ -1,6 +1,7 @@
 import React from 'react'
-import { Text, View, TextInput, TouchableOpacity } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { View, TextInput } from 'react-native'
+import Header from '../../components/Header'
+import { Button, LinkButton } from '../../components/Button'
 import api from '../../services/api'
 import { AuthContext } from '../../components/context'
 import styles from './styles'
@@ -26,8 +27,7 @@ export default function SignIn({navigation}) {
     }
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>JustChoice</Text>
-            <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
+            <Header />
 
             <TextInput 
                 onChangeText={email => setEmail(email)} 
@@ -42,16 +42,9 @@ export default function SignIn({navigation}) {
                 style={styles.input}
                 value={password}
             />
-
-            <TouchableOpacity onPress={handleSignIn} style={styles.button}>
-                <Text style={styles.textButton}>ENTRAR</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} >
-                <Text style={styles.textLink}>Faça seu cadastro!</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('PassReset')} >
-                <Text style={styles.textLink}>Esqueceu sua senha?</Text>
-            </TouchableOpacity>
+            <Button text="ENTRAR" onPress={handleSignIn} />
+            <LinkButton text="Faça seu cadastro!" onPress={() => navigation.navigate("SignUp")} />
+            <LinkButton text="Esqueceu a senha?" onPress={() => navigation.navigate("PassReset")} />
         </View>
     )
 }

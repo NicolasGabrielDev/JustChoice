@@ -11,12 +11,6 @@ export default StyleSheet.create({
         borderRadius: 60,
         margin: 16,
     },
-    textButton: {
-        fontWeight: "bold",
-        fontSize: 32,
-        textAlign: 'center',
-        color: '#ffffff',
-    },
     textButton2: {
         fontFamily: 'sans-serif-light',
         fontSize: 15,

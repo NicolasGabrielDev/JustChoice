@@ -1,15 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 export default StyleSheet.create({
-    button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: Dimensions.get('window').width * 0.8,
-        height: 40,
-        backgroundColor: '#27a0ff',
-        borderRadius: 3,
-        marginBottom: 8,
-    },
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
@@ -28,12 +19,6 @@ export default StyleSheet.create({
         height: 40,
         paddingLeft: 8,
         marginBottom: 12,
-    },
-    textButton: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 15,
-        color: '#FFFFFF',
-        textAlign: 'center',
     },
     title: {
         fontSize: 56,

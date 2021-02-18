@@ -20,21 +20,6 @@ export default StyleSheet.create({
         fontFamily: 'sans-serif-light',
         marginBottom: 36,
     },
-    button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: Dimensions.get('window').width * 0.8,
-        height: 40,
-        backgroundColor: '#27a0ff',
-        borderRadius: 3,
-        marginBottom: 24,
-    },
-    textButton: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 15,
-        color: '#FFFFFF',
-        textAlign: 'center',
-    },
     input: {
         backgroundColor: 'white',
         borderColor: '#ced4da',
@@ -48,9 +33,4 @@ export default StyleSheet.create({
         paddingLeft: 8,
         marginBottom: 12,
     },
-    textLink: {
-        fontSize: 16,
-        textAlign: "center",
-        color: '#27a0ff',
-    }
 })

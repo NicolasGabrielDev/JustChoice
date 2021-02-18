@@ -22,15 +22,6 @@ export default StyleSheet.create({
         fontFamily: 'sans-serif-light',
         marginBottom: 36,
     },
-    button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: Dimensions.get('window').width * 0.4,
-        height: 40,
-        backgroundColor: '#27a0ff',
-        borderRadius: 3,
-        marginBottom: 8,
-    },
     input: {
         borderBottomWidth: 1,
         borderColor: '#27a0ff',

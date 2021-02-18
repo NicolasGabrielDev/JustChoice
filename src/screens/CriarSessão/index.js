@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
-import { Alert, Dimensions, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Modal, Text, TextInput, View } from 'react-native'
+import { CommonActions } from '@react-navigation/native'
+import Header from '../../components/Header'
+import { Button } from '../../components/Button'
 import api from '../../services/api'
 import styles from './styles'
 
@@ -23,18 +26,15 @@ export default function SessionCreate({ navigation }) {
                 const { codigo, res } = response.data
                 setCodigo(codigo)
                 await AsyncStorage.setItem('codigo', codigo)
-                    .then(() => {
-                        navigation.dispatch(CommonActions.reset(
-                            {
-                                index: 0,
-                                routes: [
-                                    { name: "SessionQuestions" }
-                                ]
-                            }
-                        ))
-                    }).catch(error => {
-                        console.log(error.response)
-                    })
+                navigation.dispatch(CommonActions.reset(
+                    {
+                        index: 0,
+                        routes: [
+                            { name: "SessionQuestions" }
+                        ]
+                    }
+                ))
+                setModalVisible(false)
             }).catch(error => {
                 console.log(error.response)
             })
@@ -42,41 +42,20 @@ export default function SessionCreate({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Modal
-                visible={modalVisible}
-                transparent={true}
-                onRequestClose={() => console.log('Fechado')} >
+            <Modal visible={modalVisible} transparent={true}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Atenção!</Text>
-                        <Text></Text>
-                        <Text>{nome}</Text>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: "red" }]} onPress={() => {
-                            setModalVisible(false)
-                        }}>
-                            <Text style={styles.textButton}>CANCELAR</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: "green" }]} onPress={() => {
-                            
-                            handleSessionCreate()
-                            setModalVisible(false)
-                        }}>
-                            <Text style={styles.textButton}>CONFIRMA</Text>
-                        </TouchableOpacity>
+                        <Button text="CANCELAR" onPress={() => setModalVisible(false)} />
+                        <Button text="CONFIRMAR" onPress={() => handleSessionCreate()} />
                     </View>
                 </View>
             </Modal>
-            <Text style={styles.title}>JustChoice</Text>
-            <Text style={styles.subTitle}>Rápido e fácil de responder...</Text>
+            <Header />
 
             <Text style={styles.subTitle}>Nome da sessão:</Text>
             <TextInput style={styles.input} onChangeText={nome => setNome(nome)}></TextInput>
 
-            <TouchableOpacity style={styles.button} onPress={() => {
-                setModalVisible(true)
-            }}>
-                <Text style={styles.textButton}>CRIAR</Text>
-            </TouchableOpacity>
+            <Button text="CRIAR" onPress={() => setModalVisible(true)} />
         </View>
     )
 }

@@ -19,26 +19,6 @@ export default StyleSheet.create({
         fontFamily: 'sans-serif-light',
         marginBottom: 36,
     },
-    button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: Dimensions.get('window').width * 0.8,
-        height: 40,
-        backgroundColor: '#27a0ff',
-        borderRadius: 3,
-        marginBottom: 8,
-    },
-    textButton: {
-        fontFamily: 'sans-serif-light',
-        fontSize: 15,
-        color: '#FFFFFF',
-        textAlign: 'center',
-    },
-    textLink: {
-        fontSize: 16,
-        textAlign: "center",
-        color: '#27a0ff',
-    },
     passText: {
         fontSize: 18,
         color: '#27a0ff',

@@ -1,10 +1,11 @@
 import React from 'react'
-import { Text,TextInput, TouchableOpacity, View } from 'react-native'
+import { Text,TextInput, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Header from '../../components/Header'
 import api from '../../services/api'
 import styles from './styles'
 import { CommonActions } from '@react-navigation/native'
+import { Button } from '../../components/Button'
 
 export default function SessionLogIn({navigation}) {
     const [codigo, setCodigo] = React.useState('')
@@ -46,9 +47,7 @@ export default function SessionLogIn({navigation}) {
                 onChangeText={codigo => setCodigo(codigo)}
             ></TextInput>
 
-            <TouchableOpacity style={styles.button} onPress={handleSessionLogIn}>
-                <Text style={styles.textButton}>ENTRAR</Text>
-            </TouchableOpacity>
+            <Button text="ENTRAR" onPress={handleSessionLogIn} />
         </View>
     )
 }
