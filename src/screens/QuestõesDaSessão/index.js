@@ -407,7 +407,7 @@ export default function SessionQuestions({ navigation }) {
                                             elevation: 8,
                                         }}>
                                             <Text style={[Styles.title, { color: '#ffffff' }]}>Pergunta {activeData.index}</Text>
-                                            <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Pense bem antes de responder!</Text>
+                                            <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Pense bem antes de responder :)</Text>
                                         </View>
                                         <View style={styles.modalContainer}>
                                             {function () {

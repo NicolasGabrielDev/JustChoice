@@ -24,8 +24,14 @@ export default function SessionCreate({ navigation }) {
                 setCodigo(codigo)
                 await AsyncStorage.setItem('codigo', codigo)
                     .then(() => {
-                        setModalVisible(true)
-                        console.log(res)
+                        navigation.dispatch(CommonActions.reset(
+                            {
+                                index: 0,
+                                routes: [
+                                    { name: "SessionQuestions" }
+                                ]
+                            }
+                        ))
                     }).catch(error => {
                         console.log(error.response)
                     })
@@ -36,14 +42,24 @@ export default function SessionCreate({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Modal visible={modalVisible} transparent={true} onRequestClose={() => console.log('Fechado')} >
+            <Modal
+                visible={modalVisible}
+                transparent={true}
+                onRequestClose={() => console.log('Fechado')} >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
-                        <Text>Código da sessão: </Text>
-                        <Text>{codigo}</Text>
-                        <TouchableOpacity style={styles.button} onPress={() => {
+                        <Text style={styles.modalText}>Atenção!</Text>
+                        <Text></Text>
+                        <Text>{nome}</Text>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: "red" }]} onPress={() => {
                             setModalVisible(false)
-                            navigation.navigate('SessionQuestions')
+                        }}>
+                            <Text style={styles.textButton}>CANCELAR</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: "green" }]} onPress={() => {
+                            
+                            handleSessionCreate()
+                            setModalVisible(false)
                         }}>
                             <Text style={styles.textButton}>CONFIRMA</Text>
                         </TouchableOpacity>
@@ -57,7 +73,7 @@ export default function SessionCreate({ navigation }) {
             <TextInput style={styles.input} onChangeText={nome => setNome(nome)}></TextInput>
 
             <TouchableOpacity style={styles.button} onPress={() => {
-                handleSessionCreate()
+                setModalVisible(true)
             }}>
                 <Text style={styles.textButton}>CRIAR</Text>
             </TouchableOpacity>
