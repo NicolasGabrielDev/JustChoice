@@ -48,5 +48,14 @@ export default StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-    }
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: Dimensions.get('window').width * 0.4,
+        height: 40,
+        backgroundColor: '#27a0ff',
+        borderRadius: 3,
+        marginBottom: 8,
+    },
 })

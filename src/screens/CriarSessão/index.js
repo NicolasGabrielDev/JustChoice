@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React from 'react'
-import { Modal, Text, TextInput, View } from 'react-native'
+import { Image, Modal, Text, TextInput, View } from 'react-native'
 import { CommonActions } from '@react-navigation/native'
 import Header from '../../components/Header'
 import { Button } from '../../components/Button'
 import api from '../../services/api'
 import styles from './styles'
+import Confirmation from '../../../assets/confirmation.png'
 
 export default function SessionCreate({ navigation }) {
     const [nome, setNome] = React.useState('')
@@ -45,6 +46,7 @@ export default function SessionCreate({ navigation }) {
             <Modal visible={modalVisible} transparent={true}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
+                        <Image source={Confirmation} style={{ width: 180, height: 180, }} />
                         <Button text="CANCELAR" onPress={() => setModalVisible(false)} />
                         <Button text="CONFIRMAR" onPress={() => handleSessionCreate()} />
                     </View>

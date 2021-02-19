@@ -2,6 +2,7 @@ import React from 'react'
 import { View, TextInput } from 'react-native';
 import Header from '../../components/Header'
 import {Button, LinkButton} from '../../components/Button'
+import api from '../../services/api'
 import styles from './styles'
 
 export default function SignUp({navigation}) {
@@ -11,27 +12,19 @@ export default function SignUp({navigation}) {
     const [password_confirmation, setPassword_Confirmation] = React.useState("")
 
     function handleSignUp() {
-        fetch('http://whispering-stream-90983.herokuapp.com/api/auth/registro', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              name,
-              email,
-              password,
-              password_confirmation
-            })
-          }).then(response => {
-              const { res } = response.formData
-              console.log(res)
-              navigation.navigate('SignIn')
-          }).catch(error => {
-              console.log(error)
-          });
+        api.post('/api/auth/registro', {
+            name: name,
+            email: email,
+            password: password,
+            password_confirmation: password_confirmation,
+        }).then(response => {
+            const { res } = response.data
+            console.log(res)
+            navigation.navigate("SignIn")
+        }).catch(error => {
+            console.log(error.response)
+        })
     }
-
     return (
         <View style={styles.container}>
             <Header />

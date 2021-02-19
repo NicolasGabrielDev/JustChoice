@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native'
+import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -8,6 +8,8 @@ import RespostaButton from '../../components/RespostaButton'
 import Styles from '../../components/Styles'
 import styles from './styles'
 import { ScrollView } from 'react-native-gesture-handler'
+import Loading from '../../components/Loading';
+import Header from '../../components/Header';
 
 export default function SessionQuestions({ navigation }) {
     const [visible, setVisible] = React.useState(false)
@@ -190,23 +192,21 @@ export default function SessionQuestions({ navigation }) {
 
     if (isLoading) {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', backgroundColor: '#ffffff' }}>
-                <ActivityIndicator size={64} color='#27a0ff' />
-            </View>
+            <Loading />
         )
     }
 
     {
         if (usuario == 'admin') {
             return (
-                <ScrollView style={{ backgroundColor: "#ffffff"}}>
-                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                    <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
+                    <ScrollView>
                         <Modal
                             visible={visible}
                             onRequestClose={() => setVisible(false)}>
                             <View style={styles.modalContainer}>
-                                <Text style={Styles.title}>JustChoice</Text>
-                                <Text style={Styles.subTitle}>Rápido e fácil de responder...</Text>
+                                <Header />
                                 <Text style={Styles.subTitle}>Faça sua pergunta por aqui!</Text>
                                 <Text style={styles.textQuestion}>Qual a opção?</Text>
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
@@ -269,11 +269,11 @@ export default function SessionQuestions({ navigation }) {
                                     onChangeText={quantidade => setQuantidade(quantidade)}
                                 ></TextInput>
                                 <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
-                                    <TouchableOpacity style={[Styles.button, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => setVisible(false)}>
+                                    <TouchableOpacity style={[styles.button, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => setVisible(false)}>
                                         <Text style={styles.textButton2}>CANCELAR</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        style={Styles.button}
+                                        style={styles.button}
                                         onPress={() => {
                                             createQuestion()
                                         }}>
@@ -282,7 +282,6 @@ export default function SessionQuestions({ navigation }) {
                                 </View>
                             </View>
                         </Modal>
-                        <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
                         <Modal
                             visible={activeData.visible}
                             onRequestClose={() => {
@@ -364,35 +363,33 @@ export default function SessionQuestions({ navigation }) {
                         </Modal>
                         {res.perguntas.map((pergunta, index) => {
                             return (
-                                <View >
-                                    <TouchableOpacity
-                                        key={index + 1}
-                                        onPress={() => {
-                                            setActiveData({
-                                                id: pergunta.id,
-                                                tipo: pergunta.tipo,
-                                                quantidade: pergunta.quantidade,
-                                                visible: true,
-                                                index: index + 1,
-                                            })
-                                        }}
-                                        style={styles.perguntaContainer} >
-                                        <Text>Pergunta {index + 1}</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                <TouchableOpacity
+                                    key={index + 1}
+                                    onPress={() => 
+                                        setActiveData({
+                                            id: pergunta.id,
+                                            tipo: pergunta.tipo,
+                                            quantidade: pergunta.quantidade,
+                                            visible: true,
+                                            index: index + 1,
+                                        })
+                                    }
+                                    style={styles.perguntaContainer} >
+                                    <Text>Pergunta {index + 1}</Text>
+                                </TouchableOpacity>
                             )
                         })}
-                        <TouchableOpacity style={styles.buttonPlus} onPress={() => setVisible(true)}>
-                            <Text style={styles.textButton}>+</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                    <TouchableOpacity style={styles.buttonPlus} onPress={() => setVisible(true)}>
+                        <Text style={styles.textButton2}>+</Text>
+                    </TouchableOpacity>
+                </View>
             )
         } else {
             return (
-                <ScrollView style={{ backgroundColor: "#ffffff" }}>
-                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
-                        <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
+                <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                    <Text style={styles.textTitle}>Código da Sessão: {codigo}</Text>
+                    <ScrollView>
                         {res.perguntas.map((pergunta, index) => {
                             return (
                                 <View key={index + 1}>
@@ -534,13 +531,13 @@ export default function SessionQuestions({ navigation }) {
                                             }()}
                                             <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
                                                 <TouchableOpacity
-                                                    style={[Styles.button, { backgroundColor: 'red', marginRight: 20 }]}
+                                                    style={[styles.button, { backgroundColor: 'red', marginRight: 20 }]}
                                                     onPress={resetData}>
                                                     <Text style={styles.textButton2}>CANCELAR</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
                                                     onPress={answerQuestion}
-                                                    style={[Styles.button, { backgroundColor: 'green' }]}>
+                                                    style={[styles.button, { backgroundColor: 'green' }]}>
                                                     <Text style={styles.textButton2}>RESPONDER</Text>
                                                 </TouchableOpacity>
                                             </View>
@@ -560,8 +557,8 @@ export default function SessionQuestions({ navigation }) {
                                 </View>
                             )
                         })}
-                    </View >
-                </ScrollView>
+                    </ScrollView>
+                </View >
             )
         }
     }

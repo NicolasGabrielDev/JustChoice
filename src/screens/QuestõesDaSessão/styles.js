@@ -25,7 +25,7 @@ export default StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
         backgroundColor: "white",
     },
     radioContainer: {
@@ -64,5 +64,14 @@ export default StyleSheet.create({
         color: '#27a0ff',
         fontWeight: 'bold',
         fontSize: 32,
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: Dimensions.get('window').width * 0.4,
+        height: 40,
+        backgroundColor: '#27a0ff',
+        borderRadius: 3,
+        marginBottom: 8,
     },
 })
