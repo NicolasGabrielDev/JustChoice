@@ -63,6 +63,7 @@ export default function SessionQuestions({ navigation }) {
                         })
                     }
                     setNumberAnswers(simnao)
+                    setActiveData(activeData.visible(true))
                     break;
                 case "qualidade":
                     let qualidade = { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 }
@@ -72,6 +73,7 @@ export default function SessionQuestions({ navigation }) {
                         })
                     }
                     setNumberAnswers(qualidade)
+                    setActiveData(activeData.visible(true))
                     break;
                 case "dificuldade":
                     let dificuldade = { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 }
@@ -81,6 +83,7 @@ export default function SessionQuestions({ navigation }) {
                         })
                     }
                     setNumberAnswers(dificuldade)
+                    setActiveData(activeData.visible(true))
                     break;
                 case "numerica":
                     let numerica = { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 }
@@ -90,6 +93,7 @@ export default function SessionQuestions({ navigation }) {
                         })
                     }
                     setNumberAnswers(numerica)
+                    setActiveData(activeData.visible(true))
                     break;
                 case "alfabetica":
                     let alfabetica = { "Opção A": 0, "Opção B": 0, "Opção C": 0, "Opção D": 0, "Opção E": 0 }
@@ -99,6 +103,7 @@ export default function SessionQuestions({ navigation }) {
                         })
                     }
                     setNumberAnswers(alfabetica)
+                    setActiveData(activeData.visible(true))
                     break;
                 default:
                     break;
@@ -298,60 +303,60 @@ export default function SessionQuestions({ navigation }) {
                                     elevation: 8
                                 }}>
                                 <Text style={[Styles.title, { color: '#ffffff' }]}>Pergunta {activeData.index}</Text>
-                                <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas!</Text>
+                                <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas :0</Text>
                             </View>
-                            <View style={styles.modalContainer}>
+                            <View style={[styles.modalContainer, { alignItems: 'center'}]}>
                                 {function () {
                                     switch (activeData.tipo) {
                                         case "simnao":
                                             return (
                                                 <>
-                                                    <Text>Sim: {numberAnswers["Sim"]}</Text>
-                                                    <Text>Não: {numberAnswers["Não"]}</Text>
+                                                    <Text style={styles.textTitle}>Sim: {numberAnswers["Sim"]}</Text>
+                                                    <Text style={styles.textTitle}>Não: {numberAnswers["Não"]}</Text>
                                                 </>
                                             )
                                             break
                                         case "qualidade":
                                             return (
                                                 <>
-                                                    <Text>Excelente: {numberAnswers["Excelente"]}</Text>
-                                                    <Text>Bom: {numberAnswers["Bom"]}</Text>
-                                                    <Text>Médio: {numberAnswers["Médio"]}</Text>
-                                                    <Text>Ruim: {numberAnswers["Ruim"]}</Text>
-                                                    <Text>Muito ruim: {numberAnswers["Muito ruim"]}</Text>
+                                                    <Text style={styles.textTitle}>Excelente: {numberAnswers["Excelente"]}</Text>
+                                                    <Text style={styles.textTitle}>Bom: {numberAnswers["Bom"]}</Text>
+                                                    <Text style={styles.textTitle}>Médio: {numberAnswers["Médio"]}</Text>
+                                                    <Text style={styles.textTitle}>Ruim: {numberAnswers["Ruim"]}</Text>
+                                                    <Text style={styles.textTitle}>Muito ruim: {numberAnswers["Muito ruim"]}</Text>
                                                 </>
                                             )
                                             break
                                         case "dificuldade":
                                             return (
                                                 <>
-                                                    <Text>Muito difícil: {numberAnswers["Muito difícil"]}</Text>
-                                                    <Text>Difícil: {numberAnswers["Difícil"]}</Text>
-                                                    <Text>Normal: {numberAnswers["Normal"]}</Text>
-                                                    <Text>Fácil: {numberAnswers["Fácil"]}</Text>
-                                                    <Text>Muito fácil: {numberAnswers["Muito fácil"]}</Text>
+                                                    <Text style={styles.textTitle}>Muito difícil: {numberAnswers["Muito difícil"]}</Text>
+                                                    <Text style={styles.textTitle}>Difícil: {numberAnswers["Difícil"]}</Text>
+                                                    <Text style={styles.textTitle}>Normal: {numberAnswers["Normal"]}</Text>
+                                                    <Text style={styles.textTitle}>Fácil: {numberAnswers["Fácil"]}</Text>
+                                                    <Text style={styles.textTitle}>Muito fácil: {numberAnswers["Muito fácil"]}</Text>
                                                 </>
                                             )
                                             break
                                         case "numerica":
                                             return (
                                                 <>
-                                                    <Text>Opção 1: {numberAnswers["Opção 1"]}</Text>
-                                                    <Text>Opção 2: {numberAnswers["Opção 2"]}</Text>
-                                                    <Text>Opção 3: {numberAnswers["Opção 3"]}</Text>
-                                                    <Text>Opção 4: {numberAnswers["Opção 4"]}</Text>
-                                                    <Text>Opção 5: {numberAnswers["Opção 5"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção 1: {numberAnswers["Opção 1"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção 2: {numberAnswers["Opção 2"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção 3: {numberAnswers["Opção 3"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção 4: {numberAnswers["Opção 4"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção 5: {numberAnswers["Opção 5"]}</Text>
                                                 </>
                                             )
                                             break
                                         case "simnao":
                                             return (
                                                 <>
-                                                    <Text>Opção A: {numberAnswers["Opção A"]}</Text>
-                                                    <Text>Opção B: {numberAnswers["Opção B"]}</Text>
-                                                    <Text>Opção C: {numberAnswers["Opção C"]}</Text>
-                                                    <Text>Opção D: {numberAnswers["Opção D"]}</Text>
-                                                    <Text>Opção E: {numberAnswers["Opção E"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção A: {numberAnswers["Opção A"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção B: {numberAnswers["Opção B"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção C: {numberAnswers["Opção C"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção D: {numberAnswers["Opção D"]}</Text>
+                                                    <Text style={styles.textTitle}>Opção E: {numberAnswers["Opção E"]}</Text>
                                                 </>
                                             )
                                             break

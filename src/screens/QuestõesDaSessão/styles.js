@@ -21,6 +21,8 @@ export default StyleSheet.create({
         fontFamily: 'sans-serif-light',
         fontSize: 24,
         color: '#696969',
+        textAlign: "left",
+        alignSelf: 'flex-start',
     },
     modalContainer: {
         flex: 1,

@@ -29,7 +29,8 @@ export default function SessionLogIn({navigation}) {
                     index: 0,
                     routes: [
                         { name : "SessionQuestions"}
-                    ]
+                    ],
+                    
                 }
             ))
         }).catch(error => {
@@ -43,7 +44,7 @@ export default function SessionLogIn({navigation}) {
             <Text style={styles.subTitle}>Código da sessão:</Text>
             <TextInput 
                 style={styles.input}
-                placeholder='Digite aqui seu código!'
+                placeholder='Código da Sessão'
                 onChangeText={codigo => setCodigo(codigo)}
             ></TextInput>
 
