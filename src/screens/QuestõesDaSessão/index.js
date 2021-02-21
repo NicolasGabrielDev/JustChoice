@@ -10,6 +10,7 @@ import styles from './styles'
 import { ScrollView } from 'react-native-gesture-handler'
 import Loading from '../../components/Loading';
 import Header from '../../components/Header';
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default function SessionQuestions({ navigation }) {
     const [visible, setVisible] = React.useState(false)
@@ -24,6 +25,7 @@ export default function SessionQuestions({ navigation }) {
         quantidade: null,
         visible: false,
         index: null,
+        respondida: false,
     })
     const [codigo, setCodigo] = React.useState('')
     const [usuario, setUsuario] = React.useState('')
@@ -36,6 +38,7 @@ export default function SessionQuestions({ navigation }) {
             quantidade: null,
             visible: false,
             index: null,
+            respondida: false,
         })
         setActiveAnswer("")
         setNumberAnswers([])
@@ -137,10 +140,6 @@ export default function SessionQuestions({ navigation }) {
         })
         setCodigo(codigo)
         setIsLoading(false)
-
-        return async () => {
-            AsyncStorage.removeItem('codigo')
-        };
     }
 
     async function createQuestion() {
@@ -204,9 +203,10 @@ export default function SessionQuestions({ navigation }) {
     {
         if (usuario == 'admin') {
             return (
-                <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
-                    <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
-                    <ScrollView>
+                <ScrollView>
+
+                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                        <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
                         <Modal
                             visible={visible}
                             onRequestClose={() => setVisible(false)}>
@@ -217,7 +217,10 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='numerica'
-                                        onPress={() => setChecked('numerica')}
+                                        onPress={() =>  { 
+                                            setChecked('numerica')
+                                            setQuantidade("5")
+                                        }}
                                         status={checked === 'numerica' ? 'checked' : 'unchecked'}>
                                     </RadioButton>
                                     <Text>Númerica</Text>
@@ -225,7 +228,10 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='alfabetica'
-                                        onPress={() => setChecked('alfabetica')}
+                                        onPress={() => { 
+                                            setChecked('alfabetica') 
+                                            setQuantidade("5")
+                                        }}
                                         status={checked === 'alfabetica' ? 'checked' : 'unchecked'}>
                                     </RadioButton>
                                     <Text>Alfabética</Text>
@@ -267,9 +273,7 @@ export default function SessionQuestions({ navigation }) {
                                 <TextInput
                                     style={Styles.input}
                                     value={quantidade}
-                                    editable={((checked === 'dificuldade') ||
-                                        (checked === 'qualidade') ||
-                                        (checked === 'simnao')) ? false : true}
+                                    editable={false}
                                     keyboardType='number-pad'
                                     onChangeText={quantidade => setQuantidade(quantidade)}
                                 ></TextInput>
@@ -305,7 +309,7 @@ export default function SessionQuestions({ navigation }) {
                                 <Text style={[Styles.title, { color: '#ffffff' }]}>Pergunta {activeData.index}</Text>
                                 <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas :0</Text>
                             </View>
-                            <View style={[styles.modalContainer, { alignItems: 'center'}]}>
+                            <View style={[styles.modalContainer, { alignItems: 'center' }]}>
                                 {function () {
                                     switch (activeData.tipo) {
                                         case "simnao":
@@ -365,12 +369,17 @@ export default function SessionQuestions({ navigation }) {
                                     }
                                 }()}
                             </View>
+                            <TouchableOpacity
+                                style={styles.refreshButton}
+                                onPress={fetchAnswers}>
+                                <Icon name="refresh-outline" size={36} color="#ffffff" />
+                            </TouchableOpacity>
                         </Modal>
                         {res.perguntas.map((pergunta, index) => {
                             return (
                                 <TouchableOpacity
                                     key={index + 1}
-                                    onPress={() => 
+                                    onPress={() =>
                                         setActiveData({
                                             id: pergunta.id,
                                             tipo: pergunta.tipo,
@@ -384,17 +393,17 @@ export default function SessionQuestions({ navigation }) {
                                 </TouchableOpacity>
                             )
                         })}
-                    </ScrollView>
-                    <TouchableOpacity style={styles.buttonPlus} onPress={() => setVisible(true)}>
-                        <Text style={styles.textButton2}>+</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity style={styles.buttonPlus} onPress={() => setVisible(true)}>
+                            <Text style={styles.textButton2}>+</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
             )
         } else {
             return (
-                <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
-                    <Text style={styles.textTitle}>Código da Sessão: {codigo}</Text>
-                    <ScrollView>
+                <ScrollView bounces={true} style={{ flex: 1, }}>
+                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                        <Text style={styles.textTitle}>Código da Sessão: {codigo}</Text>
                         {res.perguntas.map((pergunta, index) => {
                             return (
                                 <View key={index + 1}>
@@ -562,8 +571,14 @@ export default function SessionQuestions({ navigation }) {
                                 </View>
                             )
                         })}
-                    </ScrollView>
-                </View >
+                        <TouchableOpacity
+                            style={styles.refreshButton}
+                            onPress={fetchData}>
+                            <Icon name="refresh-outline" size={36} color="#ffffff" />
+                        </TouchableOpacity>
+                    </View >
+                </ScrollView>
+
             )
         }
     }

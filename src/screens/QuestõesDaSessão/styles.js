@@ -21,8 +21,8 @@ export default StyleSheet.create({
         fontFamily: 'sans-serif-light',
         fontSize: 24,
         color: '#696969',
-        textAlign: "left",
-        alignSelf: 'flex-start',
+        textAlign: "center",
+        alignSelf: 'center',
     },
     modalContainer: {
         flex: 1,
@@ -76,4 +76,15 @@ export default StyleSheet.create({
         borderRadius: 3,
         marginBottom: 8,
     },
+    refreshButton: {
+        alignSelf: 'flex-end',
+        backgroundColor: "#27a0ff",
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 60,
+        width: 60,
+        borderRadius: 100,
+        margin: 16,
+        elevation: 8,
+    }
 })
