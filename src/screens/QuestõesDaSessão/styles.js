@@ -2,6 +2,13 @@ import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 
 export default StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: "#ffffff", 
+        justifyContent: 'flex-start', 
+        alignItems: 'center',
+        paddingTop: Platform.OS === 'android' ? 25 : 0
+    },
     buttonPlus: {
         alignSelf: "flex-end",
         justifyContent: 'center',

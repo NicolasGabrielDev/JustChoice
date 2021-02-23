@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Modal, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -7,7 +7,6 @@ import api from '../../services/api'
 import RespostaButton from '../../components/RespostaButton'
 import Styles from '../../components/Styles'
 import styles from './styles'
-import { ScrollView } from 'react-native-gesture-handler'
 import Loading from '../../components/Loading';
 import Header from '../../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -19,6 +18,7 @@ export default function SessionQuestions({ navigation }) {
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeAnswer, setActiveAnswer] = React.useState("")
     const [numberAnswers, setNumberAnswers] = React.useState([])
+    const [controleRespostas, setControleRespostas] = React.useState()
     const [activeData, setActiveData] = React.useState({
         id: null,
         tipo: null,
@@ -27,6 +27,7 @@ export default function SessionQuestions({ navigation }) {
         index: null,
         respondida: false,
     })
+    const [token, setToken] = React.useState('')
     const [codigo, setCodigo] = React.useState('')
     const [usuario, setUsuario] = React.useState('')
     const [res, setRes] = React.useState(null)
@@ -45,8 +46,6 @@ export default function SessionQuestions({ navigation }) {
     }
 
     async function fetchAnswers() {
-        const token = await AsyncStorage.getItem('userToken')
-
         await api.post('/api/respostas', {
             "pergunta_id": activeData.id
         }, {
@@ -57,60 +56,70 @@ export default function SessionQuestions({ navigation }) {
             }
         }).then(response => {
             const { res } = response.data
-            switch (activeData.tipo) {
-                case "simnao":
-                    let simnao = { "Sim": 0, "Não": 0 }
-                    {
-                        res.map((resposta) => {
-                            simnao[resposta.resposta] = simnao[resposta.resposta] + 1
-                        })
-                    }
-                    setNumberAnswers(simnao)
-                    setActiveData(activeData.visible(true))
-                    break;
-                case "qualidade":
-                    let qualidade = { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 }
-                    {
-                        res.map((resposta) => {
-                            qualidade[resposta.resposta] = qualidade[resposta.resposta] + 1
-                        })
-                    }
-                    setNumberAnswers(qualidade)
-                    setActiveData(activeData.visible(true))
-                    break;
-                case "dificuldade":
-                    let dificuldade = { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 }
-                    {
-                        res.map((resposta) => {
-                            dificuldade[resposta.resposta] = dificuldade[resposta.resposta] + 1
-                        })
-                    }
-                    setNumberAnswers(dificuldade)
-                    setActiveData(activeData.visible(true))
-                    break;
-                case "numerica":
-                    let numerica = { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 }
-                    {
-                        res.map((resposta) => {
-                            numerica[resposta.resposta] = numerica[resposta.resposta] + 1
-                        })
-                    }
-                    setNumberAnswers(numerica)
-                    setActiveData(activeData.visible(true))
-                    break;
-                case "alfabetica":
-                    let alfabetica = { "Opção A": 0, "Opção B": 0, "Opção C": 0, "Opção D": 0, "Opção E": 0 }
-                    {
-                        res.map((resposta) => {
-                            alfabetica[resposta.resposta] = alfabetica[resposta.resposta] + 1
-                        })
-                    }
-                    setNumberAnswers(alfabetica)
-                    setActiveData(activeData.visible(true))
-                    break;
-                default:
-                    break;
+            let respostas = {
+                "simnao": { "Sim": 0, "Não": 0 },
+                "alfabetica": { "Letra A": 0, "Letra B": 0, "Letra C": 0, "Letra D": 0, "Letra E": 0 },
+                "numerica": { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 },
+                "qualidade": { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 },
+                "dificuldade": { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 },
             }
+            res.map((resposta) => {
+                console.log(respostas[Object.keys("simnao")])
+            })
+            // switch (activeData.tipo) {
+            //     case "simnao":
+            //         let simnao = { "Sim": 0, "Não": 0 }
+            //         {
+            //             res.map((resposta) => {
+            //                 simnao[resposta.resposta] = simnao[resposta.resposta] + 1
+            //             })
+            //         }
+            //         setNumberAnswers(simnao)
+            //         setActiveData(activeData.visible(true))
+            //         break;
+            //     case "qualidade":
+            //         let qualidade = { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 }
+            //         {
+            //             res.map((resposta) => {
+            //                 qualidade[resposta.resposta] = qualidade[resposta.resposta] + 1
+            //             })
+            //         }
+            //         setNumberAnswers(qualidade)
+            //         setActiveData(activeData.visible(true))
+            //         break;
+            //     case "dificuldade":
+            //         let dificuldade = { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 }
+            //         {
+            //             res.map((resposta) => {
+            //                 dificuldade[resposta.resposta] = dificuldade[resposta.resposta] + 1
+            //             })
+            //         }
+            //         setNumberAnswers(dificuldade)
+            //         setActiveData(activeData.visible(true))
+            //         break;
+            //     case "numerica":
+            //         let numerica = { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 }
+            //         {
+            //             res.map((resposta) => {
+            //                 numerica[resposta.resposta] = numerica[resposta.resposta] + 1
+            //             })
+            //         }
+            //         setNumberAnswers(numerica)
+            //         setActiveData(activeData.visible(true))
+            //         break;
+            //     case "alfabetica":
+            //         let alfabetica = { "Opção A": 0, "Opção B": 0, "Opção C": 0, "Opção D": 0, "Opção E": 0 }
+            //         {
+            //             res.map((resposta) => {
+            //                 alfabetica[resposta.resposta] = alfabetica[resposta.resposta] + 1
+            //             })
+            //         }
+            //         setNumberAnswers(alfabetica)
+            //         setActiveData(activeData.visible(true))
+            //         break;
+            //     default:
+            //         break;
+            // }
         }).catch(error => {
             console.log(error)
         })
@@ -121,6 +130,7 @@ export default function SessionQuestions({ navigation }) {
         const codigo = await AsyncStorage.getItem('codigo')
         const token = await AsyncStorage.getItem('userToken')
 
+        setToken(token)
         setCodigo(codigo)
 
         await api.post('/api/perguntas', {
@@ -143,8 +153,6 @@ export default function SessionQuestions({ navigation }) {
     }
 
     async function createQuestion() {
-        const token = await AsyncStorage.getItem('userToken')
-
         await api.post('/api/criar-pergunta', {
             "tipo": checked,
             "quantidade": quantidade,
@@ -166,8 +174,6 @@ export default function SessionQuestions({ navigation }) {
     }
 
     async function answerQuestion() {
-        const token = await AsyncStorage.getItem('userToken')
-
         await api.post('/api/criar-resposta', {
             "resposta": activeAnswer,
             "pergunta_id": activeData.id
@@ -204,8 +210,7 @@ export default function SessionQuestions({ navigation }) {
         if (usuario == 'admin') {
             return (
                 <ScrollView>
-
-                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                    <View style={styles.container}>
                         <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
                         <Modal
                             visible={visible}
@@ -217,7 +222,7 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='numerica'
-                                        onPress={() =>  { 
+                                        onPress={() => {
                                             setChecked('numerica')
                                             setQuantidade("5")
                                         }}
@@ -228,8 +233,8 @@ export default function SessionQuestions({ navigation }) {
                                 <View style={[styles.radioContainer, { paddingLeft: 40 }]}>
                                     <RadioButton
                                         value='alfabetica'
-                                        onPress={() => { 
-                                            setChecked('alfabetica') 
+                                        onPress={() => {
+                                            setChecked('alfabetica')
                                             setQuantidade("5")
                                         }}
                                         status={checked === 'alfabetica' ? 'checked' : 'unchecked'}>
@@ -315,7 +320,7 @@ export default function SessionQuestions({ navigation }) {
                                         case "simnao":
                                             return (
                                                 <>
-                                                    <Text style={styles.textTitle}>Sim: {numberAnswers["Sim"]}</Text>
+                                                    <Text style={styles.textTitle}>Sim:</Text>
                                                     <Text style={styles.textTitle}>Não: {numberAnswers["Não"]}</Text>
                                                 </>
                                             )
@@ -402,7 +407,7 @@ export default function SessionQuestions({ navigation }) {
         } else {
             return (
                 <ScrollView bounces={true} style={{ flex: 1, }}>
-                    <View style={{ flex: 1, backgroundColor: "#ffffff", justifyContent: 'flex-start', alignItems: 'center', paddingTop: Platform.OS === 'android' ? 25 : 0 }}>
+                    <View style={styles.container}>
                         <Text style={styles.textTitle}>Código da Sessão: {codigo}</Text>
                         {res.perguntas.map((pergunta, index) => {
                             return (
