@@ -64,7 +64,9 @@ export default function SessionQuestions({ navigation }) {
                 "dificuldade": { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 },
             }
             res.map((resposta) => {
-                console.log(respostas[Object.keys("simnao")])
+                console.log(respostas.simnao)
+                respostas[activeData.tipo][resposta.resposta] += 1
+                setNumberAnswers(respostas[activeData.tipo])
             })
             // switch (activeData.tipo) {
             //     case "simnao":
