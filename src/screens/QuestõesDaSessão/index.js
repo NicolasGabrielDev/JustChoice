@@ -68,60 +68,6 @@ export default function SessionQuestions({ navigation }) {
                 respostas[activeData.tipo][resposta.resposta] += 1
                 setNumberAnswers(respostas[activeData.tipo])
             })
-            // switch (activeData.tipo) {
-            //     case "simnao":
-            //         let simnao = { "Sim": 0, "Não": 0 }
-            //         {
-            //             res.map((resposta) => {
-            //                 simnao[resposta.resposta] = simnao[resposta.resposta] + 1
-            //             })
-            //         }
-            //         setNumberAnswers(simnao)
-            //         setActiveData(activeData.visible(true))
-            //         break;
-            //     case "qualidade":
-            //         let qualidade = { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 }
-            //         {
-            //             res.map((resposta) => {
-            //                 qualidade[resposta.resposta] = qualidade[resposta.resposta] + 1
-            //             })
-            //         }
-            //         setNumberAnswers(qualidade)
-            //         setActiveData(activeData.visible(true))
-            //         break;
-            //     case "dificuldade":
-            //         let dificuldade = { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 }
-            //         {
-            //             res.map((resposta) => {
-            //                 dificuldade[resposta.resposta] = dificuldade[resposta.resposta] + 1
-            //             })
-            //         }
-            //         setNumberAnswers(dificuldade)
-            //         setActiveData(activeData.visible(true))
-            //         break;
-            //     case "numerica":
-            //         let numerica = { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 }
-            //         {
-            //             res.map((resposta) => {
-            //                 numerica[resposta.resposta] = numerica[resposta.resposta] + 1
-            //             })
-            //         }
-            //         setNumberAnswers(numerica)
-            //         setActiveData(activeData.visible(true))
-            //         break;
-            //     case "alfabetica":
-            //         let alfabetica = { "Opção A": 0, "Opção B": 0, "Opção C": 0, "Opção D": 0, "Opção E": 0 }
-            //         {
-            //             res.map((resposta) => {
-            //                 alfabetica[resposta.resposta] = alfabetica[resposta.resposta] + 1
-            //             })
-            //         }
-            //         setNumberAnswers(alfabetica)
-            //         setActiveData(activeData.visible(true))
-            //         break;
-            //     default:
-            //         break;
-            // }
         }).catch(error => {
             console.log(error)
         })
@@ -317,64 +263,15 @@ export default function SessionQuestions({ navigation }) {
                                 <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas :0</Text>
                             </View>
                             <View style={[styles.modalContainer, { alignItems: 'center' }]}>
-                                {function () {
-                                    switch (activeData.tipo) {
-                                        case "simnao":
-                                            return (
-                                                <>
-                                                    <Text style={styles.textTitle}>Sim:</Text>
-                                                    <Text style={styles.textTitle}>Não: {numberAnswers["Não"]}</Text>
-                                                </>
-                                            )
-                                            break
-                                        case "qualidade":
-                                            return (
-                                                <>
-                                                    <Text style={styles.textTitle}>Excelente: {numberAnswers["Excelente"]}</Text>
-                                                    <Text style={styles.textTitle}>Bom: {numberAnswers["Bom"]}</Text>
-                                                    <Text style={styles.textTitle}>Médio: {numberAnswers["Médio"]}</Text>
-                                                    <Text style={styles.textTitle}>Ruim: {numberAnswers["Ruim"]}</Text>
-                                                    <Text style={styles.textTitle}>Muito ruim: {numberAnswers["Muito ruim"]}</Text>
-                                                </>
-                                            )
-                                            break
-                                        case "dificuldade":
-                                            return (
-                                                <>
-                                                    <Text style={styles.textTitle}>Muito difícil: {numberAnswers["Muito difícil"]}</Text>
-                                                    <Text style={styles.textTitle}>Difícil: {numberAnswers["Difícil"]}</Text>
-                                                    <Text style={styles.textTitle}>Normal: {numberAnswers["Normal"]}</Text>
-                                                    <Text style={styles.textTitle}>Fácil: {numberAnswers["Fácil"]}</Text>
-                                                    <Text style={styles.textTitle}>Muito fácil: {numberAnswers["Muito fácil"]}</Text>
-                                                </>
-                                            )
-                                            break
-                                        case "numerica":
-                                            return (
-                                                <>
-                                                    <Text style={styles.textTitle}>Opção 1: {numberAnswers["Opção 1"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção 2: {numberAnswers["Opção 2"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção 3: {numberAnswers["Opção 3"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção 4: {numberAnswers["Opção 4"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção 5: {numberAnswers["Opção 5"]}</Text>
-                                                </>
-                                            )
-                                            break
-                                        case "simnao":
-                                            return (
-                                                <>
-                                                    <Text style={styles.textTitle}>Opção A: {numberAnswers["Opção A"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção B: {numberAnswers["Opção B"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção C: {numberAnswers["Opção C"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção D: {numberAnswers["Opção D"]}</Text>
-                                                    <Text style={styles.textTitle}>Opção E: {numberAnswers["Opção E"]}</Text>
-                                                </>
-                                            )
-                                            break
-                                        default:
-                                            break
-                                    }
-                                }()}
+                                {(() => {
+                                    const keys = Object.keys(numberAnswers)
+                                    const values = Object.values(numberAnswers)
+                                    keys.forEach((item) => {
+                                        return (
+                                            <Text>{item}</Text>
+                                        )
+                                    })
+                                })()}
                             </View>
                             <TouchableOpacity
                                 style={styles.refreshButton}
