@@ -56,6 +56,7 @@ export default function SessionQuestions({ navigation }) {
             }
         }).then(response => {
             const { res } = response.data
+            console.log(res)
             let respostas = {
                 "simnao": { "Sim": 0, "Não": 0 },
                 "alfabetica": { "Letra A": 0, "Letra B": 0, "Letra C": 0, "Letra D": 0, "Letra E": 0 },
@@ -63,11 +64,15 @@ export default function SessionQuestions({ navigation }) {
                 "qualidade": { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 },
                 "dificuldade": { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 },
             }
-            res.map((resposta) => {
-                console.log(respostas.simnao)
-                respostas[activeData.tipo][resposta.resposta] += 1
+            if (res == "Ninguém respondeu ainda :(") {
                 setNumberAnswers(respostas[activeData.tipo])
-            })
+            } else {
+                res.map((resposta) => {
+                    respostas[activeData.tipo][resposta.resposta] += 1
+                })
+                setNumberAnswers(respostas[activeData.tipo])
+            }
+
         }).catch(error => {
             console.log(error)
         })
@@ -263,15 +268,37 @@ export default function SessionQuestions({ navigation }) {
                                 <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Confira as respostas :0</Text>
                             </View>
                             <View style={[styles.modalContainer, { alignItems: 'center' }]}>
-                                {(() => {
-                                    const keys = Object.keys(numberAnswers)
-                                    const values = Object.values(numberAnswers)
-                                    keys.forEach((item) => {
-                                        return (
-                                            <Text>{item}</Text>
-                                        )
-                                    })
-                                })()}
+                                {function () {
+                                    let keys = Object.keys(numberAnswers)
+                                    let values = Object.values(numberAnswers)
+                                    switch (activeData.tipo) {
+                                        case "simnao":
+                                            return (
+                                                <>
+                                                    <Text style={styles.textTitle}>{keys[0]}: {values[0]}</Text>
+                                                    <Text style={styles.textTitle}>{keys[1]}: {values[1]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        case "numerica":
+                                        case "alfabetica":
+                                        case "qualidade":
+                                        case "dificuldade":
+                                            return (
+                                                <>
+                                                    <Text style={styles.textTitle}>{keys[0]}: {values[0]}</Text>
+                                                    <Text style={styles.textTitle}>{keys[1]}: {values[1]}</Text>
+                                                    <Text style={styles.textTitle}>{keys[2]}: {values[2]}</Text>
+                                                    <Text style={styles.textTitle}>{keys[3]}: {values[3]}</Text>
+                                                    <Text style={styles.textTitle}>{keys[4]}: {values[4]}</Text>
+                                                </>
+                                            )
+                                            break
+                                        default:
+                                            break
+
+                                    }
+                                }()}
                             </View>
                             <TouchableOpacity
                                 style={styles.refreshButton}
