@@ -361,7 +361,11 @@ export default function SessionQuestions({ navigation }) {
                                                     "qualidade": { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 },
                                                     "dificuldade": { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 },
                                                 }
-                                                let keys = Object.keys(respostas[activeData.tipo])
+                                                if (activeData.tipo === null) {
+                                                    return false
+                                                }
+                                                let object = respostas[activeData.tipo]
+                                                let keys = Object.keys(object)
                                                 switch (activeData.tipo) {
                                                     case "simnao":
                                                         return (
@@ -423,7 +427,8 @@ export default function SessionQuestions({ navigation }) {
                                             </View>
                                         </View>
                                     </Modal>
-                                    <TouchableOpacity style={styles.perguntaContainer} onPress={() => {
+                                    <TouchableOpacity 
+                                        style={styles.perguntaContainer} onPress={() => {
                                         setActiveData({
                                             id: pergunta.id,
                                             tipo: pergunta.tipo,
