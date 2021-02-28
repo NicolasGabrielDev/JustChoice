@@ -4,7 +4,6 @@ import { RadioButton } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import api from '../../services/api'
-import RespostaButton from '../../components/RespostaButton'
 import Styles from '../../components/Styles'
 import styles from './styles'
 import Loading from '../../components/Loading';
@@ -18,34 +17,62 @@ export default function SessionQuestions({ navigation }) {
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeAnswer, setActiveAnswer] = React.useState("")
     const [numberAnswers, setNumberAnswers] = React.useState([])
-    const [controleRespostas, setControleRespostas] = React.useState()
     const [activeData, setActiveData] = React.useState({
         id: null,
-        tipo: null,
+        tipo: "simnao",
         quantidade: null,
         visible: false,
         index: null,
         respondida: false,
     })
-    const [token, setToken] = React.useState('')
     const [codigo, setCodigo] = React.useState('')
     const [usuario, setUsuario] = React.useState('')
     const [res, setRes] = React.useState(null)
+    const respostas = {
+        "simnao": [
+            { option: "Sim" },
+            { option: "Não" }],
+        "alfabetica": [
+            { option: "Letra A" },
+            { option: "Letra B" },
+            { option: "Letra C" },
+            { option: "Letra D" },
+            { option: "Letra E" }],
+        "numerica": [
+            { option: "Opção 1" },
+            { option: "Opção 2" },
+            { option: "Opção 3" },
+            { option: "Opção 4" },
+            { option: "Opção 5" }],
+        "qualidade": [
+            { option: "Excelente" },
+            { option: "Bom" },
+            { option: "Médio" },
+            { option: "Ruim" },
+            { option: "Muito ruim" }],
+        "dificuldade": [
+            { option: "Muito difícil" },
+            { option: "Difícil" },
+            { option: "Normal" },
+            { option: "Fácil" },
+            { option: "Muito fácil" }],
+    }
 
     const resetData = () => {
         setActiveData({
             id: null,
-            tipo: null,
+            tipo: "simnao",
             quantidade: null,
             visible: false,
             index: null,
-            respondida: false,
         })
         setActiveAnswer("")
         setNumberAnswers([])
     }
 
     async function fetchAnswers() {
+        const token = await AsyncStorage.getItem('userToken')
+
         await api.post('/api/respostas', {
             "pergunta_id": activeData.id
         }, {
@@ -56,7 +83,7 @@ export default function SessionQuestions({ navigation }) {
             }
         }).then(response => {
             const { res } = response.data
-            console.log(res)
+            console.log(response.status)
             let respostas = {
                 "simnao": { "Sim": 0, "Não": 0 },
                 "alfabetica": { "Letra A": 0, "Letra B": 0, "Letra C": 0, "Letra D": 0, "Letra E": 0 },
@@ -127,6 +154,8 @@ export default function SessionQuestions({ navigation }) {
     }
 
     async function answerQuestion() {
+        const token = await AsyncStorage.getItem('userToken')
+
         await api.post('/api/criar-resposta', {
             "resposta": activeAnswer,
             "pergunta_id": activeData.id
@@ -138,7 +167,7 @@ export default function SessionQuestions({ navigation }) {
             }
         }).then(response => {
             const { res } = response.data
-            alert(res)
+            alert(response)
             resetData()
             fetchData()
 
@@ -333,7 +362,7 @@ export default function SessionQuestions({ navigation }) {
             )
         } else {
             return (
-                <ScrollView bounces={true} style={{ flex: 1, }}>
+                <ScrollView style={{ flex: 1, }}>
                     <View style={styles.container}>
                         <Text style={styles.textTitle}>Código da Sessão: {codigo}</Text>
                         {res.perguntas.map((pergunta, index) => {
@@ -353,66 +382,18 @@ export default function SessionQuestions({ navigation }) {
                                             <Text style={[Styles.subTitle, { marginBottom: 0, color: '#ffffff' }]}>Pense bem antes de responder :)</Text>
                                         </View>
                                         <View style={styles.modalContainer}>
-                                            {function () {
-                                                let respostas = {
-                                                    "simnao": { "Sim": 0, "Não": 0 },
-                                                    "alfabetica": { "Letra A": 0, "Letra B": 0, "Letra C": 0, "Letra D": 0, "Letra E": 0 },
-                                                    "numerica": { "Opção 1": 0, "Opção 2": 0, "Opção 3": 0, "Opção 4": 0, "Opção 5": 0 },
-                                                    "qualidade": { "Excelente": 0, "Bom": 0, "Médio": 0, "Ruim": 0, "Muito ruim": 0 },
-                                                    "dificuldade": { "Muito difícil": 0, "Difícil": 0, "Normal": 0, "Fácil": 0, "Muito fácil": 0 },
-                                                }
-                                                if (activeData.tipo === null) {
-                                                    return false
-                                                }
-                                                let object = respostas[activeData.tipo]
-                                                let keys = Object.keys(object)
-                                                switch (activeData.tipo) {
-                                                    case "simnao":
-                                                        return (
-                                                            <View style={styles.respostaContainer}>
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[0])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[0]} />
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[1])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[1]} />
-                                                            </View>
-                                                        )
-                                                        break
-                                                    case "alfabetica":
-                                                    case "numerica":
-                                                    case "dificuldade":
-                                                    case "qualidade":
-                                                        return (
-                                                            <View style={styles.respostaContainer}>
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[0])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[0]} />
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[1])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[1]} />
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[2])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[2]} />
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[3])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[3]} />
-                                                                <RespostaButton
-                                                                    onPress={() => setActiveAnswer(keys[4])}
-                                                                    activeAnswer={activeAnswer}
-                                                                    text={keys[4]} />
-                                                            </View>
-                                                        )
-                                                        break
-
-                                                }
-                                            }()}
+                                            <View style={styles.respostaContainer}>
+                                                {respostas[activeData.tipo].map((item, index) => {
+                                                    return (
+                                                        <TouchableOpacity
+                                                            key={index}
+                                                            onPress={() => setActiveAnswer(item.option)}
+                                                            style={[styles.buttonResposta, activeAnswer == item.option ? { backgroundColor: "#27a0ff" } : { backgroundColor: "#ffffff" }]}>
+                                                            <Text style={[styles.textResposta, activeAnswer == item.option ? { color: "#ffffff" } : { color: "#000000" }]}>{item.option}</Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                                })}
+                                            </View>
                                             <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
                                                 <TouchableOpacity
                                                     style={[styles.button, { backgroundColor: 'red', marginRight: 20 }]}
@@ -427,16 +408,17 @@ export default function SessionQuestions({ navigation }) {
                                             </View>
                                         </View>
                                     </Modal>
-                                    <TouchableOpacity 
-                                        style={styles.perguntaContainer} onPress={() => {
-                                        setActiveData({
-                                            id: pergunta.id,
-                                            tipo: pergunta.tipo,
-                                            quantidade: pergunta.quantidade,
-                                            visible: true,
-                                            index: index + 1,
-                                        })
-                                    }}>
+                                    <TouchableOpacity
+                                        style={styles.perguntaContainer}
+                                        onPress={() => {
+                                            setActiveData({
+                                                id: pergunta.id,
+                                                tipo: pergunta.tipo,
+                                                quantidade: pergunta.quantidade,
+                                                visible: true,
+                                                index: index + 1,
+                                            })
+                                        }}>
                                         <Text>Pergunta {index + 1}</Text>
                                     </TouchableOpacity>
                                 </View>

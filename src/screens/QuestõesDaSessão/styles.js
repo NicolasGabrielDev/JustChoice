@@ -93,5 +93,19 @@ export default StyleSheet.create({
         borderRadius: 100,
         margin: 16,
         elevation: 8,
-    }
+    },
+    textResposta: {
+        fontFamily: 'sans-serif-light',
+        fontSize: 18,
+    },
+    buttonResposta: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#27a0ff',
+        borderWidth: 1,
+        borderRadius: 36,
+        width: Dimensions.get("window").width * 0.8,
+        height: Dimensions.get("window").height * 0.08,
+        margin: 8,
+    },
 })
