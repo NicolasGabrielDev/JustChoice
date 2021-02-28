@@ -18,9 +18,7 @@ export default function SignIn({navigation}) {
             password
         }).then(response => {
             const { token } = response.data
-            console.log(response)
             Login(token)
-            console.log(token)
         }).catch(error => {
             console.log(error)
         })

@@ -8,12 +8,12 @@ import { CommonActions } from '@react-navigation/native'
 import { Button } from '../../components/Button'
 
 export default function SessionLogIn({navigation}) {
-    const [codigo, setCodigo] = React.useState('')
+    const [sessionCode, setSessionCode] = React.useState('')
 
     async function handleSessionLogIn() {
         const token = await AsyncStorage.getItem('userToken')
         await api.post('/api/entrar-sessao', {
-            codigo
+            "codigo" : sessionCode
         },{ 
             headers: {
                 'Accept': 'application/json',
@@ -21,9 +21,7 @@ export default function SessionLogIn({navigation}) {
                 'Authorization': "Bearer " + token,
             }
         }).then(async response => {
-            const { token } = response.data
-            await AsyncStorage.setItem('codigo', codigo)
-
+            await AsyncStorage.setItem('sessionCode', sessionCode)
             navigation.dispatch(CommonActions.reset(
                 {
                     index: 0,
@@ -45,9 +43,8 @@ export default function SessionLogIn({navigation}) {
             <TextInput 
                 style={styles.input}
                 placeholder='Código da Sessão'
-                onChangeText={codigo => setCodigo(codigo)}
+                onChangeText={sessionCode => setSessionCode(sessionCode)}
             ></TextInput>
-
             <Button text="ENTRAR" onPress={handleSessionLogIn} />
         </View>
     )

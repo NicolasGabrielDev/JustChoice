@@ -17,16 +17,10 @@ export default function SessionQuestions({ navigation }) {
     const [isLoading, setIsLoading] = React.useState(true)
     const [activeAnswer, setActiveAnswer] = React.useState("")
     const [numberAnswers, setNumberAnswers] = React.useState([])
-    const [activeData, setActiveData] = React.useState({
-        id: null,
-        tipo: "simnao",
-        quantidade: null,
-        visible: false,
-        index: null,
-        respondida: false,
-    })
-    const [codigo, setCodigo] = React.useState('')
-    const [usuario, setUsuario] = React.useState('')
+    const [activeData, setActiveData] = React.useState({ id: null, tipo: "simnao", quantidade: null, visible: false, index: null })
+    const [userToken, setUserToken] = React.useState("")
+    const [sessionCode, setSessionCode] = React.useState('')
+    const [userType, setUserType] = React.useState('')
     const [res, setRes] = React.useState(null)
     const respostas = {
         "simnao": [
@@ -71,19 +65,16 @@ export default function SessionQuestions({ navigation }) {
     }
 
     async function fetchAnswers() {
-        const token = await AsyncStorage.getItem('userToken')
-
         await api.post('/api/respostas', {
             "pergunta_id": activeData.id
         }, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token
+                'Authorization': "Bearer " + userToken
             }
         }).then(response => {
             const { res } = response.data
-            console.log(response.status)
             let respostas = {
                 "simnao": { "Sim": 0, "Não": 0 },
                 "alfabetica": { "Letra A": 0, "Letra B": 0, "Letra C": 0, "Letra D": 0, "Letra E": 0 },
@@ -107,28 +98,23 @@ export default function SessionQuestions({ navigation }) {
 
     async function fetchData() {
         setIsLoading(true)
-        const codigo = await AsyncStorage.getItem('codigo')
-        const token = await AsyncStorage.getItem('userToken')
 
-        setToken(token)
-        setCodigo(codigo)
-
-        await api.post('/api/perguntas', {
-            codigo
+        await api.post('/api/perguntas', { 
+            "sessionCode" : sessionCode
         }, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
+                'Authorization': "Bearer " + userToken,
             }
         }).then(response => {
             const { res, usuario } = response.data
-            setUsuario(usuario)
+            setUserType(usuario)
             setRes(res)
         }).catch(error => {
             console.log(error.response)
         })
-        setCodigo(codigo)
+        setSessionCode(sessionCode)
         setIsLoading(false)
     }
 
@@ -141,7 +127,7 @@ export default function SessionQuestions({ navigation }) {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token
+                'Authorization': "Bearer " + userToken
             }
         }).then(response => {
             const { res } = response.data
@@ -154,8 +140,6 @@ export default function SessionQuestions({ navigation }) {
     }
 
     async function answerQuestion() {
-        const token = await AsyncStorage.getItem('userToken')
-
         await api.post('/api/criar-resposta', {
             "resposta": activeAnswer,
             "pergunta_id": activeData.id
@@ -163,11 +147,11 @@ export default function SessionQuestions({ navigation }) {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token
+                'Authorization': "Bearer " + userToken
             }
         }).then(response => {
             const { res } = response.data
-            alert(response)
+            alert(res)
             resetData()
             fetchData()
 
@@ -178,6 +162,12 @@ export default function SessionQuestions({ navigation }) {
 
     useFocusEffect(
         React.useCallback(() => {
+            const sessionCode = await AsyncStorage.getItem('sessionCode')
+            const userToken = await AsyncStorage.getItem('userToken')
+
+            setSessionCode(sessionCode)
+            setUserToken(userToken)
+
             fetchData()
         }, [])
     );
@@ -189,11 +179,11 @@ export default function SessionQuestions({ navigation }) {
     }
 
     {
-        if (usuario == 'admin') {
+        if (userType == 'admin') {
             return (
                 <ScrollView>
                     <View style={styles.container}>
-                        <Text style={styles.textTitle}>Código da Sessão: {codigo} </Text>
+                        <Text style={styles.textTitle}>Código da Sessão: {sessionCode} </Text>
                         <Modal
                             visible={visible}
                             onRequestClose={() => setVisible(false)}>
@@ -261,8 +251,8 @@ export default function SessionQuestions({ navigation }) {
                                     style={Styles.input}
                                     value={quantidade}
                                     editable={false}
-                                    keyboardType='number-pad'
-                                    onChangeText={quantidade => setQuantidade(quantidade)}
+                                    // keyboardType='number-pad'
+                                    // onChangeText={quantidade => setQuantidade(quantidade)}
                                 ></TextInput>
                                 <View style={{ flexDirection: "row", alignItems: "center", alignSelf: "center" }}>
                                     <TouchableOpacity style={[styles.button, { backgroundColor: 'red', marginRight: 20, }]} onPress={() => setVisible(false)}>
@@ -270,9 +260,7 @@ export default function SessionQuestions({ navigation }) {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={styles.button}
-                                        onPress={() => {
-                                            createQuestion()
-                                        }}>
+                                        onPress={createQuestion}>
                                         <Text style={styles.textButton2}>CRIAR</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -298,7 +286,6 @@ export default function SessionQuestions({ navigation }) {
                             </View>
                             <View style={[styles.modalContainer, { alignItems: 'center' }]}>
                                 {function () {
-
                                     let keys = Object.keys(numberAnswers)
                                     let values = Object.values(numberAnswers)
                                     switch (activeData.tipo) {
@@ -364,7 +351,7 @@ export default function SessionQuestions({ navigation }) {
             return (
                 <ScrollView style={{ flex: 1, }}>
                     <View style={styles.container}>
-                        <Text style={styles.textTitle}>Código da Sessão: {codigo}</Text>
+                        <Text style={styles.textTitle}>Código da Sessão: {sessionCode}</Text>
                         {res.perguntas.map((pergunta, index) => {
                             return (
                                 <View key={index + 1}>
@@ -427,7 +414,10 @@ export default function SessionQuestions({ navigation }) {
                         <TouchableOpacity
                             style={styles.refreshButton}
                             onPress={fetchData}>
-                            <Icon name="refresh-outline" size={36} color="#ffffff" />
+                            <Icon 
+                                name="refresh-outline" 
+                                size={36} 
+                                color="#ffffff"/>
                         </TouchableOpacity>
                     </View >
                 </ScrollView>

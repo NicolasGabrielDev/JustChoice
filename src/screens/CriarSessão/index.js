@@ -9,8 +9,8 @@ import styles from './styles'
 import Confirmation from '../../../assets/confirmation.png'
 
 export default function SessionCreate({ navigation }) {
-    const [nome, setNome] = React.useState('')
-    const [codigo, setCodigo] = React.useState('')
+    const [name, setName] = React.useState('')
+    const [sessionCode, setSessionCode] = React.useState('')
     const [modalVisible, setModalVisible] = React.useState(false)
 
     async function handleSessionCreate() {
@@ -24,9 +24,9 @@ export default function SessionCreate({ navigation }) {
             }
         })
             .then(async response => {
-                const { codigo, res } = response.data
-                setCodigo(codigo)
-                await AsyncStorage.setItem('codigo', codigo)
+                const { codigo } = response.data
+                setSessionCode(codigo)
+                await AsyncStorage.setItem('sessionCode', sessionCode)
                 navigation.dispatch(CommonActions.reset(
                     {
                         index: 0,
@@ -48,15 +48,13 @@ export default function SessionCreate({ navigation }) {
                     <View style={styles.modalView}>
                         <Image source={Confirmation} style={{ width: 180, height: 180, }} />
                         <Button text="CANCELAR" onPress={() => setModalVisible(false)} />
-                        <Button text="CONFIRMAR" onPress={() => handleSessionCreate()} />
+                        <Button text="CONFIRMAR" onPress={handleSessionCreate} />
                     </View>
                 </View>
             </Modal>
             <Header />
-
             <Text style={styles.subTitle}>Nome da sessão:</Text>
-            <TextInput style={styles.input} onChangeText={nome => setNome(nome)}></TextInput>
-
+            <TextInput style={styles.input} onChangeText={name => setName(name)}></TextInput>
             <Button text="CRIAR" onPress={() => setModalVisible(true)} />
         </View>
     )

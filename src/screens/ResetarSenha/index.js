@@ -6,13 +6,13 @@ import Header from '../../components/Header'
 import { Button, LinkButton } from '../../components/Button';
 
 export default function SignIn({navigation}) {
-
     const [email, setEmail] = React.useState('')
 
     function handlePassReset(){
         api.post('password/reset', {email})
         .then(response => {
-            console.warn('Deu certo desgraça')
+            const { res } = response.data
+            console.log(res)
         })
         .catch(error =>{
             console.warn(error)
